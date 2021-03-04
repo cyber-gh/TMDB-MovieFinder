@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "188242267843",
+    "project_id": "tmdb-find-your-movie",
+    "storage_bucket": "tmdb-find-your-movie.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188242267843:android:8161300c4007afb4691c76",
+        "android_client_info": {
+          "package_name": "dev.skyit.tmdb_findyourmovie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188242267843-m7mudg6blievj6qkola3qp5c8t9diteu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe-lWvrBSKGGGuIiBn5INkLaqVvvMOnRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "188242267843-m7mudg6blievj6qkola3qp5c8t9diteu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

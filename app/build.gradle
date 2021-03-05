@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+    id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
@@ -20,6 +22,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+//        dataBinding true
+        viewBinding true
     }
 
     signingConfigs {
@@ -92,6 +99,9 @@ dependencies {
 
     //Network Calls
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation("com.squareup.okhttp3:okhttp:4.7.2")
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:26.6.0')
@@ -111,8 +121,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     //Serialization
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // or "kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0" // JVM dependency
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // or "kotlin-stdlib-jdk8"
+//    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0" // JVM dependency
 
 
     // Room
@@ -132,4 +142,12 @@ dependencies {
 
     //preferences
     implementation "androidx.preference:preference-ktx:1.1.1"
+
+    //Utilities
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.3'
+
+    //Serialization
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // or "kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2" // JVM dependency
+//    implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC"
 }

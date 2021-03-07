@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +29,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         vModel.loadData()
 
+        vModel.moviesList.observe(viewLifecycleOwner, Observer { movies ->
+            binding.testButton.setOnClickListener {
+                findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToMovieDetailsFragment(movies.first()))
+            }
+        })
     }
 
 }

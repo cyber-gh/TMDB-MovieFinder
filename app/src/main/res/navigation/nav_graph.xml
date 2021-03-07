@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="dev.skyit.tmdb_findyourmovie.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -22,4 +26,13 @@
         android:name="dev.skyit.tmdb_findyourmovie.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="dev.skyit.tmdb_findyourmovie.ui.movie_details.MovieDetailsFragment"
+        android:label="MovieDetailsFragment"
+        tools:layout="@layout/fragment_movie_details">
+        <argument
+            android:name="movie_minimal"
+            app:argType="dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal" />
+    </fragment>
 </navigation>

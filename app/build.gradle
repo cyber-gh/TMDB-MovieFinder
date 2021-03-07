@@ -150,4 +150,7 @@ dependencies {
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // or "kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2" // JVM dependency
 //    implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC"
+
+    // Rating bar
+    implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
 }

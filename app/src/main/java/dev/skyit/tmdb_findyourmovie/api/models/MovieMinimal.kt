@@ -36,4 +36,4 @@ data class MovieMinimal(
     val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int
-)
+) : java.io.Serializable

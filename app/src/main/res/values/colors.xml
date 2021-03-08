@@ -286,10 +286,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
-    <!-- Colors for the app -->
-    <color name="primary">@color/indigo_500</color>
-    <color name="primary_dark">@color/indigo_700</color>
-    <color name="accent">@color/pink_A200</color>
+
 
     <!--Light Background Dark Text-->
     <color name="light_bg_dark_primary_text">#DE000000</color>
@@ -303,7 +300,18 @@
     <color name="dark_bg_light_disabled_text">#80FFFFFF</color>
     <color name="dark_bg_light_hint_text">#80FFFFFF</color>
 
-    <color name="dark_blue_background">#040D14</color>
+    <!-- Colors for the app -->
+    <color name="primaryColor">#388e3c</color>
+    <color name="primaryLightColor">#6abf69</color>
+    <color name="primaryDarkColor">#00600f</color>
+    <color name="secondaryColor">#304ffe</color>
+    <color name="secondaryLightColor">#7a7cff</color>
+    <color name="secondaryDarkColor">#0026ca</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#ffffff</color>
+
+
+    <color name="dark_blue_background">#2b3948</color>
 
 
 </resources>

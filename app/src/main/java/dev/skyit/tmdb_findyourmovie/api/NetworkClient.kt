@@ -3,6 +3,7 @@ package dev.skyit.tmdb_findyourmovie.api
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.api.models.MoviesResult
+import dev.skyit.tmdb_findyourmovie.api.models.TMDBApiConf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl
@@ -25,6 +26,9 @@ interface IMoviesAPIClient {
             @Path("media_type") mediaType: String = "movie",
             @Path("interval") interval: String = "week"
         ): MoviesResult
+
+        @GET("configuration")
+        suspend fun getConf(): TMDBApiConf
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
@@ -65,8 +69,28 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
                 .create(IMoviesAPIClient.MoviesAPIService::class.java)
     }
 
+    @Volatile
+    private var config: TMDBApiConf? = null
+
+    private suspend fun getOrSetConfig(): TMDBApiConf {
+        if (config == null) {
+            config = service.getConf()
+        }
+        return config!!
+    }
+
+    private suspend fun String.getFullPath(): String {
+        val conf = getOrSetConfig()
+        return "${conf.images.secureBaseUrl}original${this}"
+    }
+
     override suspend fun getTrendingMovies(): List<MovieMinimal> {
-        return service.getTrending().movieMinimals
+        return service.getTrending().movieMinimals.map {
+            it.apply {
+                it.backdropPath = it.backdropPath.getFullPath()
+                it.posterPath = it.posterPath.getFullPath()
+            }
+        }
     }
 
 }

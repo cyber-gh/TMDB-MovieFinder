@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
+import coil.load
 import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentHomeBinding
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentMovieDetailsBinding
@@ -20,6 +21,7 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.movieNameLabel.text = args.movieMinimal.title
+        binding.moviePoster.load(args.movieMinimal.posterPath)
 
 //        vModel.loadData()
 

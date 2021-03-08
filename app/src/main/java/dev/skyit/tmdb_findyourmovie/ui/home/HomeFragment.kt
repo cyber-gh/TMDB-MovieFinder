@@ -34,6 +34,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToMovieDetailsFragment(movies.first()))
             }
         })
+
+        binding.toSignUpButton.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToSignUpFragment())
+        }
     }
 
 }

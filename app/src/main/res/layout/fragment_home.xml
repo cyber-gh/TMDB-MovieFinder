@@ -39,4 +39,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <Button
+        android:id="@+id/to_sign_up_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="ToSignUp"
+        app:layout_constraintEnd_toEndOf="@+id/test_button"
+        app:layout_constraintStart_toStartOf="@+id/test_button"
+        app:layout_constraintTop_toBottomOf="@+id/test_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

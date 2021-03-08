@@ -18,10 +18,12 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
     private val args: MovieDetailsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.moviePoster.transitionName = args.imageTransitionId
+
         super.onViewCreated(view, savedInstanceState)
 
         binding.movieNameLabel.text = args.movieMinimal.title
-        binding.moviePoster.load(args.movieMinimal.posterPath)
+        binding.moviePoster.load(args.movieMinimal.backdropPath)
 
 //        vModel.loadData()
 

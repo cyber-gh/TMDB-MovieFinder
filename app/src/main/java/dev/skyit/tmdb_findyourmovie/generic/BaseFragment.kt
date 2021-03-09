@@ -4,9 +4,14 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
+import dev.skyit.tmdb_findyourmovie.MainActivity
 import dev.skyit.tmdb_findyourmovie.R
+import dev.skyit.tmdb_findyourmovie.ui.utils.Loadable
 
-open class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment(layoutId) {
+open class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment(layoutId), Loadable {
+
+    private val parentActivity: MainActivity
+        get() = activity as MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,4 +20,12 @@ open class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment(layoutI
         sharedElementReturnTransition =
             TransitionInflater.from(context).inflateTransition(R.transition.custom_move)
     }
+
+    override var isLoading: Boolean
+        get() = parentActivity.isLoading
+        set(value) {
+            parentActivity.isLoading = value
+        }
+
+
 }

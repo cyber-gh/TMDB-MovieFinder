@@ -11,4 +11,5 @@
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="sign_in_button">Sign In</string>
+    <string name="sign_in_guest">Sign in as guest</string>
 </resources>

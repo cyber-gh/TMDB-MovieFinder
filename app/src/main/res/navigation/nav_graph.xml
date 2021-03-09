@@ -25,10 +25,14 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="dev.skyit.tmdb_findyourmovie.ui.notifications.NotificationsFragment"
+        android:id="@+id/navigation_profile"
+        android:name="dev.skyit.tmdb_findyourmovie.ui.profile.ProfileFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="dev.skyit.tmdb_findyourmovie.ui.movie_details.MovieDetailsFragment"
@@ -59,5 +63,8 @@
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 </navigation>

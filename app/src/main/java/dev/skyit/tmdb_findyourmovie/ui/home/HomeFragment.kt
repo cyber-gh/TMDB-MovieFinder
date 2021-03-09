@@ -47,7 +47,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             this.moviePreviewName.text = data.title
             this.simpleRatingBar.rating = (data.voteAverage / 2).toFloat()
         }, onItemClick = { v, item ->
-            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToMovieDetailsFragment(item, v.moviePreview.transitionName), FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName))
+            findNavController().navigate(HomeFragmentDirections
+                .actionNavigationHomeToMovieDetailsFragment(
+                    item, v.moviePreview.transitionName
+                ),
+                FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
+            )
         })
 
         binding.recomendedMoviesList.adapter = recommendedMoviesAdapter

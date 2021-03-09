@@ -23,8 +23,6 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        isLoading = true
-
         form {
             inputLayout(binding.usernameInputField) {
                 isEmail()

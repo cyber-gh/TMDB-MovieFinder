@@ -154,7 +154,7 @@ dependencies {
     // Rating bar
     implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
 
-    //COroutines extensions
+    //Coroutines extensions
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3'

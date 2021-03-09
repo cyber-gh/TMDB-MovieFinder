@@ -15,4 +15,8 @@ abstract class RepoModule {
     @Singleton
     @Binds
     abstract fun bindUserRepo(repo: FirebaseUserRepo): UserRepo
+
+    @Singleton
+    @Binds
+    abstract fun bindMoviesRepo(repo: MoviesRepo): LocalMoviesRepo
 }

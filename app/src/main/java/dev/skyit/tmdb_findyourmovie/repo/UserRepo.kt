@@ -2,7 +2,8 @@ package dev.skyit.tmdb_findyourmovie.repo
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import dev.skyit.tmdb_findyourmovie.utils.await
+import kotlinx.coroutines.tasks.await
+
 
 data class UserDetails(val fullName: String, val email: String, val profilePic: String? = null)
 

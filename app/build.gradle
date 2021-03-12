@@ -161,7 +161,4 @@ dependencies {
 
     //Form validation
     implementation 'com.afollestad:vvalidator:0.5.2'
-
-    // Circle image view
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

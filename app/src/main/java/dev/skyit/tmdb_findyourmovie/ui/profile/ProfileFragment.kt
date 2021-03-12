@@ -43,8 +43,8 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             this.moviePreviewName.text = data.title
             this.simpleRatingBar.rating = (data.voteAverage / 2).toFloat()
         }, onItemClick = { v, item ->
-            findNavController().navigate(HomeFragmentDirections
-                    .actionNavigationHomeToMovieDetailsFragment(
+            findNavController().navigate(ProfileFragmentDirections
+                    .actionNavigationProfileToMovieDetailsFragment(
                             item, v.moviePreview.transitionName
                     ),
                     FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)

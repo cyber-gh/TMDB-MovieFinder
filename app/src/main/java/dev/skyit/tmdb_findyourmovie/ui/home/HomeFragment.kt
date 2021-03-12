@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import coil.Coil
 import coil.load
+import coil.request.ImageRequest
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
@@ -46,6 +48,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             this.moviePreview.load(data.posterPath)
             this.moviePreviewName.text = data.title
             this.simpleRatingBar.rating = (data.voteAverage / 2).toFloat()
+            Coil.enqueue(ImageRequest.Builder(requireContext())
+                    .data(data.backdropPath)
+                    .build())
         }, onItemClick = { v, item ->
             findNavController().navigate(HomeFragmentDirections
                 .actionNavigationHomeToMovieDetailsFragment(

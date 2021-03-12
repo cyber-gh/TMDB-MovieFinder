@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_navigation_home_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
-        <action
-            android:id="@+id/action_navigation_home_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
     </fragment>
 
     <fragment
@@ -32,6 +29,9 @@
         <action
             android:id="@+id/action_navigation_profile_to_signInFragment"
             app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/action_navigation_profile_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailsFragment"

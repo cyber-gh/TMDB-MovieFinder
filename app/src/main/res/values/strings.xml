@@ -14,4 +14,5 @@
     <string name="sign_in_guest">Sign in as guest</string>
     <string name="title_profile">Profile</string>
     <string name="recently_watched">Recently watched</string>
+    <string name="movie">Movie</string>
 </resources>

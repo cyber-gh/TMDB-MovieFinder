@@ -2,13 +2,17 @@ package dev.skyit.tmdb_findyourmovie.ui.profile
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import coil.Coil
+import coil.ImageLoader
 import coil.load
+import coil.request.ImageRequest
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
@@ -41,7 +45,12 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             this.moviePreview.transitionName = data.id.toString()
             this.moviePreview.load(data.posterPath)
             this.moviePreviewName.text = data.title
-            this.simpleRatingBar.rating = (data.voteAverage / 2).toFloat()
+            this.simpleRatingBar.isVisible = false
+
+            Coil.enqueue(ImageRequest.Builder(requireContext())
+                    .data(data.backdropPath)
+                    .build())
+//            this.simpleRatingBar.rating = (data.voteAverage / 2).toFloat()
         }, onItemClick = { v, item ->
             findNavController().navigate(ProfileFragmentDirections
                     .actionNavigationProfileToMovieDetailsFragment(

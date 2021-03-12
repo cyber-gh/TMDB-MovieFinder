@@ -4,8 +4,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
-import dev.skyit.tmdb_findyourmovie.api.MoviesApiClient
 import javax.inject.Singleton
 
 @Module
@@ -18,5 +16,5 @@ abstract class RepoModule {
 
     @Singleton
     @Binds
-    abstract fun bindMoviesRepo(repo: MoviesToWatchRepo): LocalMoviesRepo
+    abstract fun bindMoviesRepo(toWatchImpl: MoviesToWatchImpl): MoviesToWatchRepo
 }

@@ -16,7 +16,7 @@ interface MoviesToWatchRepo{
     suspend fun deleteMovie(movieDb: MovieDb)
 }
 
-class LocalMoviesRepo @Inject constructor(private val db: AppDatabase): MoviesToWatchRepo{
+class MoviesToWatchImpl @Inject constructor(private val db: AppDatabase): MoviesToWatchRepo{
     private val mDao: MoviesDao = db.moviesDao()
     private val mLaterDao: MoviesToWatchDao = db.moviesToWatchDao()
     override suspend fun getAllMovies(): List<MovieDb> {

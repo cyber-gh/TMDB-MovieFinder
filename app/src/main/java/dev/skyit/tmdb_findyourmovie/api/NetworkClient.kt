@@ -29,9 +29,15 @@ interface IMoviesAPIClient {
 
         @GET("configuration")
         suspend fun getConf(): TMDBApiConf
+
+        @GET("movie/popular")
+        suspend fun getPopular(
+//            @Path()
+        ): MoviesResult
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
+    suspend fun getPopularMovies(): List<MovieMinimal>
 }
 
 class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
@@ -93,4 +99,12 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
         }
     }
 
+    override suspend fun getPopularMovies(): List<MovieMinimal> {
+        return service.getPopular().movieMinimals.map {
+            it.apply {
+                it.backdropPath = it.backdropPath.getFullPath()
+                it.posterPath = it.posterPath.getFullPath()
+            }
+        }
+    }
 }

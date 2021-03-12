@@ -47,5 +47,9 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
                 }
             }
         })
+
+        binding.goToSignUp.setOnClickListener {
+            findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToSignUpFragment())
+        }
     }
 }

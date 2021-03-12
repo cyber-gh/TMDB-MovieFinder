@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_navigation_home_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
-        <action
-            android:id="@+id/action_navigation_home_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
     </fragment>
 
     <fragment

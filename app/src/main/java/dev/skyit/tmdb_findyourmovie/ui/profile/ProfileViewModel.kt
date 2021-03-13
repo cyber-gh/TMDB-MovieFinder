@@ -6,14 +6,20 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
 import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.repo.UserRepo
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-        private val api: IMoviesAPIClient
+        private val api: IMoviesAPIClient,
+        private val userRepo: UserRepo
 ) : ViewModel() {
+
+
+    val isAuth: Boolean
+        get() = userRepo.isAuthenticated
 
     fun loadData() {
         viewModelScope.launch {

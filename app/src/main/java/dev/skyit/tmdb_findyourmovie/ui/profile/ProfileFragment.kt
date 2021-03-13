@@ -31,10 +31,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 
     private lateinit var recentlyWatchedMoviesAdapter: SimpleRecyclerAdapter<MovieMinimal, ListItemRecentlyWatchedBinding>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
+    private fun setupRecentlyList() {
         binding.signInBtn.setOnClickListener {
             findNavController().navigate(ProfileFragmentDirections.actionNavigationProfileToSignInFragment())
         }
@@ -69,5 +66,25 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 
 
         vModel.loadData()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        setupRecentlyList()
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
+        binding.signInBtn.isVisible = vModel.isAuth
+
+        if (!vModel.isAuth) {
+            binding.username.text = "Guest User"
+        }
     }
 }

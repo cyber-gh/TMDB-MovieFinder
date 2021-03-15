@@ -11,13 +11,18 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.Coil
 import coil.load
 import coil.request.ImageRequest
+import com.afollestad.vvalidator.form
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentProfileBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemRecentlyWatchedBinding
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
+import dev.skyit.tmdb_findyourmovie.ui.signin.SignInFragmentDirections
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
+import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
+import dev.skyit.tmdb_findyourmovie.ui.utils.snack
+import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
@@ -27,11 +32,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 
     private lateinit var recentlyWatchedMoviesAdapter: SimpleRecyclerAdapter<MovieMinimal, ListItemRecentlyWatchedBinding>
 
-    private fun setupRecentlyList() {
-        binding.signInBtn.setOnClickListener {
-            findNavController().navigate(ProfileFragmentDirections.actionNavigationProfileToSignInFragment())
-        }
-
+    private fun buildRecentlyWatchedList() {
         recentlyWatchedMoviesAdapter = SimpleRecyclerAdapter({
             ListItemRecentlyWatchedBinding.inflate(it)
         }, { data ->
@@ -41,14 +42,14 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             this.simpleRatingBar.isVisible = false
 
             Coil.enqueue(ImageRequest.Builder(requireContext())
-                    .data(data.backdropPath)
-                    .build())
+                .data(data.backdropPath)
+                .build())
         }, onItemClick = { v, item ->
             findNavController().navigate(ProfileFragmentDirections
-                    .actionNavigationProfileToMovieDetailsFragment(
-                             item, v.moviePreview.transitionName, item.id
-                    ),
-                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
+                .actionNavigationProfileToMovieDetailsFragment(
+                    item, v.moviePreview.transitionName, item.id
+                ),
+                FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
             )
         })
 
@@ -63,23 +64,37 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
         vModel.loadData()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun bindUI() {
+        binding.signInBtn.setOnClickListener {
+            findNavController().navigate(ProfileFragmentDirections.actionNavigationProfileToSignInFragment())
+        }
 
+        binding.signOutBtn.setOnClickListener {
+            vModel.signOut()
+            snack("Logged Out")
+        }
 
-        setupRecentlyList()
+        vModel.state.observe(viewLifecycleOwner, {
+            binding.signInBtn.isVisible = !vModel.isAuth
+            binding.signOutBtn.isVisible = vModel.isAuth
+
+            if (!vModel.isAuth) {
+                binding.username.text = "Guest User"
+                binding.moviePreview.setImageResource(R.drawable.profile_pic)
+            } else {
+                binding.username.text = vModel.username
+            }
+        })
 
 
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
 
-        binding.signInBtn.isVisible = vModel.isAuth
+        bindUI()
 
-        if (!vModel.isAuth) {
-            binding.username.text = "Guest User"
-        }
+        buildRecentlyWatchedList()
     }
 }

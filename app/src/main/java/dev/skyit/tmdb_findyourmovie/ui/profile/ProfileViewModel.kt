@@ -6,7 +6,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.repo.UserDetails
 import dev.skyit.tmdb_findyourmovie.repo.UserRepo
+import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
+import dev.skyit.tmdb_findyourmovie.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -16,10 +19,13 @@ class ProfileViewModel @Inject constructor(
         private val api: IMoviesAPIClient,
         private val userRepo: UserRepo
 ) : ViewModel() {
-
-
     val isAuth: Boolean
         get() = userRepo.isAuthenticated
+
+    val state: MutableLiveData<Boolean> = MutableLiveData<Boolean>(isAuth)
+
+    val username: String
+        get() = userRepo.currentUser!!.username
 
     fun loadData() {
         viewModelScope.launch {
@@ -29,6 +35,13 @@ class ProfileViewModel @Inject constructor(
 
             Timber.i("Movies are")
             Timber.i(movies.toString())
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            userRepo.signOut()
+            state.postValue(false)
         }
     }
 

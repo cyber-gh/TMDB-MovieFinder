@@ -5,6 +5,8 @@ import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.MovieCredits
 import dev.skyit.tmdb_findyourmovie.api.models.moviedetails.MovieDetails
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MoviesResult
+import dev.skyit.tmdb_findyourmovie.api.models.movievideo.MovieVideo
+import dev.skyit.tmdb_findyourmovie.api.models.movievideo.MovieVideos
 import dev.skyit.tmdb_findyourmovie.api.models.settings.TMDBApiConf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -54,6 +56,11 @@ interface IMoviesAPIClient {
         suspend fun getMovieCredits(
                 @Path("movie_id") movieId: Int
         ): MovieCredits
+
+        @GET("movie/{movie_id}/videos")
+        suspend fun getVideos(
+            @Path("movie_id") movieId: Int
+        ): MovieVideos
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
@@ -62,6 +69,7 @@ interface IMoviesAPIClient {
 
     suspend fun getMovieDetails(movieId: Int): MovieDetails
     suspend fun getMovieCredits(movieId: Int): MovieCredits
+    suspend fun getMovieVideos(movieId: Int): List<MovieVideo>
 
 
 }
@@ -159,5 +167,9 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
                     }
                 }
         )
+    }
+
+    override suspend fun getMovieVideos(movieId: Int): List<MovieVideo> {
+        return service.getVideos(movieId).movieVideos
     }
 }

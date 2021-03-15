@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            binding.toolbar.isVisible = destination.id != R.id.webFragment
+        }
         
     }
 

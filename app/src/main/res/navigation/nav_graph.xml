@@ -48,6 +48,9 @@
         <argument
             android:name="movie_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_movieDetailsFragment_to_webFragment"
+            app:destination="@id/webFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -69,5 +72,18 @@
         <action
             android:id="@+id/action_signInFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/webFragment"
+        android:name="dev.skyit.tmdb_findyourmovie.ui.common.WebFragment"
+        android:label="WebFragment"
+        tools:layout="@layout/fragment_web">
+        <argument
+            android:name="link"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

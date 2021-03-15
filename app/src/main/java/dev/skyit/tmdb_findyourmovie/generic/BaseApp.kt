@@ -1,12 +1,20 @@
 package dev.skyit.tmdb_findyourmovie.generic
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
 import dev.skyit.tmdb_findyourmovie.BuildConfig
+import dev.skyit.tmdb_findyourmovie.notification.NotificationWorker
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @HiltAndroidApp
-class BaseApp : Application() {
+class BaseApp : Application(), Configuration.Provider {
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     override fun onCreate() {
         super.onCreate()
 
@@ -14,5 +22,21 @@ class BaseApp : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
+        scheduleNotification()
     }
+
+    private fun scheduleNotification() {
+        val work = PeriodicWorkRequestBuilder<NotificationWorker>(16, TimeUnit.MINUTES)
+                .setInitialDelay(10, TimeUnit.SECONDS)
+            .build()
+
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("send_notification",ExistingPeriodicWorkPolicy.REPLACE, work)
+    }
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+
+            .setWorkerFactory(workerFactory).build()
+    }
+
 }

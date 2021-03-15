@@ -1,5 +1,6 @@
 package dev.skyit.tmdb_findyourmovie
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +12,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.ActivityMainBinding
+import dev.skyit.tmdb_findyourmovie.ui.movie_details.MovieDetailsFragmentArgs
 import dev.skyit.tmdb_findyourmovie.ui.utils.Loadable
+import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
@@ -41,7 +45,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
 //        navController.addOnDestinationChangedListener { controller, destination, arguments ->
 //            binding.toolbar.isVisible = destination.id != R.id.webFragment
 //        }
-        
+
+        processIntent(intent)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -57,6 +62,25 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
 
     fun setAppBarTitle(title: String) {
         supportActionBar?.setTitle(title)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        processIntent(intent)
+
+    }
+
+    private fun processIntent(intent: Intent?) {
+        val it = intent ?: return
+
+        val idx = it.getIntExtra("movieId", -1)
+        if (idx == -1) return
+//        else errAlert("The id is ${idx}")
+        val movie: MovieMinimal = it.getSerializableExtra("movieDetails") as MovieMinimal
+
+
+        findNavController(R.id.nav_host_fragment).navigate(R.id.movieDetailsFragment, MovieDetailsFragmentArgs(movie, null, movie.id).toBundle())
     }
 
 }

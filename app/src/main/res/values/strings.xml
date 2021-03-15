@@ -16,4 +16,5 @@
     <string name="recently_watched">Recently watched</string>
     <string name="movie">Movie</string>
     <string name="title_my_movies">My movies</string>
+    <string name="added_watch_later">Added to Watch Later</string>
 </resources>

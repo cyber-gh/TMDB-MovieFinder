@@ -17,4 +17,8 @@ abstract class RepoModule {
     @Singleton
     @Binds
     abstract fun bindMoviesRepo(toWatchImpl: MoviesToWatchImpl): MoviesToWatchRepo
+
+    @Singleton
+    @Binds
+    abstract fun bindWatchedMoviesRepo(watchedImpl: WatchedMoviesRepoImpl): WatchedMoviesRepo
 }

@@ -2,6 +2,7 @@ package dev.skyit.tmdb_findyourmovie.ui.movie_details
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,6 +22,7 @@ import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
 import dev.skyit.tmdb_findyourmovie.ui.utils.setItemSpacing
+import dev.skyit.tmdb_findyourmovie.ui.utils.snack
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 
 @AndroidEntryPoint
@@ -35,8 +37,44 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
         binding.moviePoster.transitionName = args.imageTransitionId
         super.onViewCreated(view, savedInstanceState)
 
-
         bindUI()
+    }
+
+    private fun setupListeners(didWatch: Boolean) {
+        if (didWatch) {
+            binding.btnAddWatchLater.isVisible = false
+            binding.btnMarkWatched.text = "Remove from watched"
+
+            binding.btnMarkWatched.setOnClickListener {
+                vModel.removeFromWatched(args.movieMinimal)
+
+                snack("Removed from watched")
+
+                setupListeners(!didWatch)
+            }
+
+            return
+        }
+
+        binding.btnAddWatchLater.isVisible = true
+        binding.btnMarkWatched.text = "Mark as watched"
+
+
+        binding.btnAddWatchLater.setOnClickListener {
+            vModel.addToWatchLater(args.movieMinimal)
+
+            snack(getString(R.string.added_watch_later))
+        }
+
+        binding.btnMarkWatched.setOnClickListener {
+            vModel.markAsWatched(args.movieMinimal)
+
+            snack("Marked as Watched")
+
+            setupListeners(!didWatch)
+        }
+
+
     }
 
 
@@ -54,6 +92,7 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
                     populateDetails(it.data!!.movieDetails)
                     populateCredits(it.data!!.credits)
                     setTrailerLink(it.data.videos)
+                    setupListeners(it.data.didWatch)
                 }
             }
         })

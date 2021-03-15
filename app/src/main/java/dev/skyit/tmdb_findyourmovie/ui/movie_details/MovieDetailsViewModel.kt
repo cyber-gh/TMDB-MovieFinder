@@ -8,7 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
 import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.MovieCredits
 import dev.skyit.tmdb_findyourmovie.api.models.moviedetails.MovieDetails
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.api.models.movievideo.MovieVideo
+import dev.skyit.tmdb_findyourmovie.repo.MoviesToWatchRepo
+import dev.skyit.tmdb_findyourmovie.repo.WatchedMoviesRepo
+import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,12 +20,15 @@ import javax.inject.Inject
 data class MovieModel(
         val movieDetails: MovieDetails,
         val credits: MovieCredits,
-        val videos: List<MovieVideo>
+        val videos: List<MovieVideo>,
+        val didWatch: Boolean
 )
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
         private val apiClient: IMoviesAPIClient,
+        private val moviesToWatchRepo: MoviesToWatchRepo,
+        private val watchedMoviesRepo: WatchedMoviesRepo,
         private val state: SavedStateHandle
 ) : ViewModel() {
 
@@ -38,10 +45,30 @@ class MovieDetailsViewModel @Inject constructor(
                 val credits = apiClient.getMovieCredits(movieId)
                 val videos = apiClient.getMovieVideos(movieId)
 
-                movieDetailsLive.postValue(LoadingResource.Success(MovieModel(details, credits, videos)))
+                val didWatch = watchedMoviesRepo.getAllMovies().firstOrNull { it.id == idx } != null
+
+                movieDetailsLive.postValue(LoadingResource.Success(MovieModel(details, credits, videos, didWatch)))
             }.onFailure {
                 movieDetailsLive.postValue(LoadingResource.Error(it.localizedMessage))
             }
+        }
+    }
+
+    fun addToWatchLater(movie: MovieMinimal) {
+        viewModelScope.launch {
+            moviesToWatchRepo.addMovie(movie.toDbFormat())
+        }
+    }
+
+    fun markAsWatched(movie: MovieMinimal) {
+        viewModelScope.launch {
+            watchedMoviesRepo.addMovie(movie.toDbFormat())
+        }
+    }
+
+    fun removeFromWatched(movie: MovieMinimal) {
+        viewModelScope.launch {
+            watchedMoviesRepo.deleteMovie(movie.toDbFormat())
         }
     }
 

@@ -1,6 +1,7 @@
 package dev.skyit.tmdb_findyourmovie.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import dev.skyit.tmdb_findyourmovie.api.models.MovieDetails
 import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.api.models.MoviesResult
 import dev.skyit.tmdb_findyourmovie.api.models.TMDBApiConf
@@ -34,10 +35,15 @@ interface IMoviesAPIClient {
         suspend fun getPopular(
 //            @Path()
         ): MoviesResult
+
+        @GET("movie/{movie_id}")
+        suspend fun getMovieDetails(@Path("movie_id") movieId: Int): MovieDetails
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
     suspend fun getPopularMovies(): List<MovieMinimal>
+
+    suspend fun getMovieDetails(movieId: Int): MovieDetails
 }
 
 class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
@@ -105,6 +111,13 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
                 it.backdropPath = it.backdropPath.getFullPath()
                 it.posterPath = it.posterPath.getFullPath()
             }
+        }
+    }
+
+    override suspend fun getMovieDetails(movieId: Int): MovieDetails {
+        return service.getMovieDetails(movieId).apply {
+            posterPath = posterPath?.getFullPath()
+            backdropPath = backdropPath?.getFullPath()
         }
     }
 }

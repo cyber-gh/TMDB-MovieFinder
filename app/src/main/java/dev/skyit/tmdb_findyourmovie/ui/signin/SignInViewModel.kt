@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.generic.BaseViewModel
 import dev.skyit.tmdb_findyourmovie.repo.UserDetails
 import dev.skyit.tmdb_findyourmovie.repo.UserRepo
-import dev.skyit.tmdb_findyourmovie.utils.LoadingResult
+import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 import dev.skyit.tmdb_findyourmovie.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,17 +17,17 @@ class SignInViewModel @Inject constructor(
     private val userRepo: UserRepo
 ) : BaseViewModel() {
 
-    val state: SingleLiveEvent<LoadingResult> = SingleLiveEvent()
+    val state: SingleLiveEvent<LoadingResource<UserDetails>> = SingleLiveEvent()
 
     fun login(email: String, pass: String) {
         viewModelScope.launch {
-            state.postValue(LoadingResult.Loading)
+            state.postValue(LoadingResource.Loading())
             kotlin.runCatching {
                 userRepo.login(email, pass)
             }.onFailure {
-                state.postValue(LoadingResult.Failure(it.localizedMessage))
+                state.postValue(LoadingResource.Error(it.localizedMessage))
             }.onSuccess {
-                state.postValue(LoadingResult.Success(it))
+                state.postValue(LoadingResource.Success(it))
             }
         }
     }

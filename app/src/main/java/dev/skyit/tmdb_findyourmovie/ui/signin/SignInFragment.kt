@@ -13,7 +13,7 @@ import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
 import dev.skyit.tmdb_findyourmovie.repo.UserDetails
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
 import dev.skyit.tmdb_findyourmovie.ui.utils.snack
-import dev.skyit.tmdb_findyourmovie.utils.LoadingResult
+import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 
 @AndroidEntryPoint
 class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
@@ -37,11 +37,11 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
         }
 
         vModel.state.observe(viewLifecycleOwner, {
-            isLoading = it is LoadingResult.Loading
+            isLoading = it is LoadingResource.Loading
 
             when (it) {
-                is LoadingResult.Failure -> errAlert(it.msg)
-                is LoadingResult.Success<*> -> {
+                is LoadingResource.Error -> errAlert(it.errorMessage ?: "Unknown Error")
+                is LoadingResource.Success -> {
                     snack("Logged In")
                     findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToNavigationHome())
                 }

@@ -47,11 +47,10 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             Coil.enqueue(ImageRequest.Builder(requireContext())
                     .data(data.backdropPath)
                     .build())
-//            this.simpleRatingBar.rating = (data.voteAverage / 2).toFloat()
         }, onItemClick = { v, item ->
             findNavController().navigate(ProfileFragmentDirections
                     .actionNavigationProfileToMovieDetailsFragment(
-                            item, v.moviePreview.transitionName
+                             item, v.moviePreview.transitionName, item.id
                     ),
                     FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
             )

@@ -5,29 +5,47 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieMinimal(
+data class MovieDetails(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
-    var backdropPath: String,
-    @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    var backdropPath: String?,
+    @SerialName("budget")
+    val budget: Int,
+    @SerialName("genres")
+    val genres: List<Genre>,
+    @SerialName("homepage")
+    val homepage: String?,
     @SerialName("id")
     val id: Int,
-    @SerialName("media_type")
-    val mediaType: String,
+    @SerialName("imdb_id")
+    val imdbId: String?,
     @SerialName("original_language")
     val originalLanguage: String,
     @SerialName("original_title")
     val originalTitle: String,
     @SerialName("overview")
-    val overview: String?,
+    val overview: String,
     @SerialName("popularity")
     val popularity: Double,
     @SerialName("poster_path")
-    var posterPath: String,
+    var posterPath: String?,
+    @SerialName("production_companies")
+    val productionCompanies: List<ProductionCompany>,
+    @SerialName("production_countries")
+    val productionCountries: List<ProductionCountry>,
     @SerialName("release_date")
     val releaseDate: String,
+    @SerialName("revenue")
+    val revenue: Int,
+    @SerialName("runtime")
+    val runtime: Int?,
+    @SerialName("spoken_languages")
+    val spokenLanguages: List<SpokenLanguage>,
+    @SerialName("status")
+    val status: String,
+    @SerialName("tagline")
+    val tagline: String,
     @SerialName("title")
     val title: String,
     @SerialName("video")
@@ -36,4 +54,4 @@ data class MovieMinimal(
     val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int
-) : java.io.Serializable
+)

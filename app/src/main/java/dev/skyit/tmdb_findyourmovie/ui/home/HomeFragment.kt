@@ -54,7 +54,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }, onItemClick = { v, item ->
             findNavController().navigate(HomeFragmentDirections
                 .actionNavigationHomeToMovieDetailsFragment(
-                    item, v.moviePreview.transitionName
+                    item, v.moviePreview.transitionName, item.id
                 ),
                 FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
             )

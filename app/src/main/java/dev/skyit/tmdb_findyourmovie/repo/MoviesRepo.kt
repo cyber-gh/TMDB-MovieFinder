@@ -39,6 +39,7 @@ fun MovieMinimal.toDbFormat(): MovieDb {
     return MovieDb(
         id = id,
         title = title,
+        overview=overview,
         voteAverage = voteAverage,
         backdropPath, posterPath, releaseDate
     )

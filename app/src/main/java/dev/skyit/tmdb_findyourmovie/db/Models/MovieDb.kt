@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class MovieDb(
     @PrimaryKey val id: Int,
     val title: String,
+    val overview: String?,
     val voteAverage: Double,
     val backdropPath: String,
     val posterPath: String,

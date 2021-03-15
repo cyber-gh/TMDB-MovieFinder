@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.afollestad.vvalidator.form
+import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentSignUpBinding
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
@@ -16,6 +17,7 @@ import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
 import dev.skyit.tmdb_findyourmovie.ui.utils.snack
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 
+@AndroidEntryPoint
 class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
     private val vModel: SignUpViewModel by viewModels()
     private val binding: FragmentSignUpBinding by viewBinding()
@@ -35,7 +37,7 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
             }
 
             submitWith(binding.signUpButton) {
-                vModel.signUp(binding.usernameInputField.editText!!.text.toString(), binding.passwordInputField.editText!!.text.toString())
+                vModel.signUp(binding.usernameInputField.editText!!.text.toString(), binding.emailInputField.editText!!.text.toString(), binding.passwordInputField.editText!!.text.toString())
             }
         }
 
@@ -45,8 +47,8 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
             when (it) {
                 is LoadingResource.Error -> errAlert(it.errorMessage ?: "Unknown Error")
                 is LoadingResource.Success -> {
-                    snack("Logged In")
-                    findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToNavigationHome())
+                    snack("Welcome ${it.data!!.username}")
+                    findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToNavigationHome())
                 }
             }
         })

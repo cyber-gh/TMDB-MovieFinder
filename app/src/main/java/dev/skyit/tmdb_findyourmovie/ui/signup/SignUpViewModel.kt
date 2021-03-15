@@ -17,11 +17,11 @@ class SignUpViewModel @Inject constructor(
 
     val state: SingleLiveEvent<LoadingResource<UserDetails>> = SingleLiveEvent()
 
-    fun signUp(email: String, pass: String) {
+    fun signUp(username: String, email: String, pass: String) {
         viewModelScope.launch {
             state.postValue(LoadingResource.Loading())
             kotlin.runCatching {
-                userRepo.login(email, pass)
+                userRepo.signUp(username, email, pass)
             }.onFailure {
                 state.postValue(LoadingResource.Error(it.localizedMessage))
             }.onSuccess {

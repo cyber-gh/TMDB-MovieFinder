@@ -1,6 +1,6 @@
 package dev.skyit.tmdb_findyourmovie.repo
 
-import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.db.AppDatabase
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieToWatch

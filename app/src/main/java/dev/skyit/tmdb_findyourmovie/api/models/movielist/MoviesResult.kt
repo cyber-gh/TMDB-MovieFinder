@@ -1,4 +1,4 @@
-package dev.skyit.tmdb_findyourmovie.api.models
+package dev.skyit.tmdb_findyourmovie.api.models.movielist
 
 
 import kotlinx.serialization.SerialName

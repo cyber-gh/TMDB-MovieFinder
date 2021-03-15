@@ -1,13 +1,11 @@
 package dev.skyit.tmdb_findyourmovie.ui.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
-import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject

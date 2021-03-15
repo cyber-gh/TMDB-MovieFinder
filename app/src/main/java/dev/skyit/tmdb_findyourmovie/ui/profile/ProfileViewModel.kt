@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
-import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.repo.UserRepo
 import kotlinx.coroutines.launch
 import timber.log.Timber

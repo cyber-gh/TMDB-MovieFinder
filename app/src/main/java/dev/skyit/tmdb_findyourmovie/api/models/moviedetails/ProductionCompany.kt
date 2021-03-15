@@ -1,4 +1,4 @@
-package dev.skyit.tmdb_findyourmovie.api.models
+package dev.skyit.tmdb_findyourmovie.api.models.moviedetails
 
 
 import kotlinx.serialization.SerialName
@@ -9,7 +9,7 @@ data class ProductionCompany(
     @SerialName("id")
     val id: Int,
     @SerialName("logo_path")
-    val logoPath: String,
+    val logoPath: String?,
     @SerialName("name")
     val name: String,
     @SerialName("origin_country")

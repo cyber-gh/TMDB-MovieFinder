@@ -7,20 +7,16 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.Coil
-import coil.ImageLoader
 import coil.load
 import coil.request.ImageRequest
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
-import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentProfileBinding
-import dev.skyit.tmdb_findyourmovie.databinding.ListItemMovieMinimalBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemRecentlyWatchedBinding
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
-import dev.skyit.tmdb_findyourmovie.ui.home.HomeFragmentDirections
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
 
 @AndroidEntryPoint

@@ -40,7 +40,7 @@
         tools:layout="@layout/fragment_movie_details">
         <argument
             android:name="movie_minimal"
-            app:argType="dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal" />
+            app:argType="dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal" />
         <argument
             android:name="image_transition_id"
             app:argType="string"

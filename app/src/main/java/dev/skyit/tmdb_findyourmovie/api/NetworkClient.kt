@@ -1,10 +1,11 @@
 package dev.skyit.tmdb_findyourmovie.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import dev.skyit.tmdb_findyourmovie.api.models.MovieDetails
-import dev.skyit.tmdb_findyourmovie.api.models.MovieMinimal
-import dev.skyit.tmdb_findyourmovie.api.models.MoviesResult
-import dev.skyit.tmdb_findyourmovie.api.models.TMDBApiConf
+import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.MovieCredits
+import dev.skyit.tmdb_findyourmovie.api.models.moviedetails.MovieDetails
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MoviesResult
+import dev.skyit.tmdb_findyourmovie.api.models.settings.TMDBApiConf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl
@@ -31,19 +32,21 @@ interface IMoviesAPIClient {
         @GET("configuration")
         suspend fun getConf(): TMDBApiConf
 
-        @GET("movie/popular")
-        suspend fun getPopular(
-//            @Path()
-        ): MoviesResult
 
         @GET("movie/{movie_id}")
         suspend fun getMovieDetails(@Path("movie_id") movieId: Int): MovieDetails
+
+        @GET("movie/{movie_id}/credits")
+        suspend fun getMovieCredits(
+                @Path("movie_id") movieId: Int
+        ): MovieCredits
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
     suspend fun getPopularMovies(): List<MovieMinimal>
 
     suspend fun getMovieDetails(movieId: Int): MovieDetails
+    suspend fun getMovieCredits(movieId: Int): MovieCredits
 }
 
 class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
@@ -76,7 +79,9 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
         Retrofit.Builder()
                 .baseUrl(apiRoot)
                 .client(httpClient)
-                .addConverterFactory(Json.asConverterFactory(contentType))
+                .addConverterFactory(Json{
+                    ignoreUnknownKeys = true
+                }.asConverterFactory(contentType))
                 .build()
                 .create(IMoviesAPIClient.MoviesAPIService::class.java)
     }
@@ -106,7 +111,7 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
     }
 
     override suspend fun getPopularMovies(): List<MovieMinimal> {
-        return service.getPopular().movieMinimals.map {
+        return service.getTrending().movieMinimals.map {
             it.apply {
                 it.backdropPath = it.backdropPath.getFullPath()
                 it.posterPath = it.posterPath.getFullPath()
@@ -119,5 +124,22 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
             posterPath = posterPath?.getFullPath()
             backdropPath = backdropPath?.getFullPath()
         }
+    }
+
+    override suspend fun getMovieCredits(movieId: Int): MovieCredits {
+        val credits = service.getMovieCredits(movieId)
+        return MovieCredits(
+                id = credits.id,
+                cast = credits.cast.map {
+                    it.apply {
+                        it.profilePath = it.profilePath?.getFullPath()
+                    }
+                },
+                crew = credits.crew.map {
+                    it.apply {
+                        it.profilePath = it.profilePath?.getFullPath()
+                    }
+                }
+        )
     }
 }

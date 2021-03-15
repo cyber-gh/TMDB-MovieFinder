@@ -1,13 +1,13 @@
-package dev.skyit.tmdb_findyourmovie.api.models
+package dev.skyit.tmdb_findyourmovie.api.models.moviedetails
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SpokenLanguage(
-    @SerialName("iso_639_1")
-    val iso6391: String,
+data class Genre(
+    @SerialName("id")
+    val id: Int,
     @SerialName("name")
     val name: String
 )

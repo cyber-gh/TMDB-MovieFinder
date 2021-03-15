@@ -81,7 +81,7 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
             this.imageView.load(data.profilePath)
             this.actorName.text = data.originalName
 
-            this.actorCharacterName.text = data.name
+            this.actorCharacterName.text = data.character
         })
 
         binding.movieCrewRecyclerView.adapter = crewAdapter

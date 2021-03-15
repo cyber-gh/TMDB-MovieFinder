@@ -16,10 +16,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="dev.skyit.tmdb_findyourmovie.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_my_movies"
+        android:name="dev.skyit.tmdb_findyourmovie.ui.mymovies.MyMoviesFragment"
+        android:label="@string/title_my_movies"
+        tools:layout="@layout/fragment_my_movies" />
 
     <fragment
         android:id="@+id/navigation_profile"

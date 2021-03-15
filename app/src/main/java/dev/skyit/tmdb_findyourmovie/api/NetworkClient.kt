@@ -18,6 +18,14 @@ import retrofit2.http.Path
 import javax.inject.Inject
 
 
+enum class MovieListType(val value: String) {
+    LATEST("latest"),
+    POPULAR("popular"),
+    TOP_RATED("top_rated"),
+    NOW_PLAYING("now_playing"),
+    TRENDING("trending")
+}
+
 interface IMoviesAPIClient {
 
 
@@ -28,6 +36,12 @@ interface IMoviesAPIClient {
             @Path("media_type") mediaType: String = "movie",
             @Path("interval") interval: String = "week"
         ): MoviesResult
+
+        @GET("movie/{list_type}")
+        suspend fun getMoviesList(
+            @Path("list_type") listType: String
+        ): MoviesResult
+
 
         @GET("configuration")
         suspend fun getConf(): TMDBApiConf
@@ -43,10 +57,13 @@ interface IMoviesAPIClient {
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
-    suspend fun getPopularMovies(): List<MovieMinimal>
+
+    suspend fun getMoviesList(type: MovieListType): List<MovieMinimal>
 
     suspend fun getMovieDetails(movieId: Int): MovieDetails
     suspend fun getMovieCredits(movieId: Int): MovieCredits
+
+
 }
 
 class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
@@ -110,8 +127,9 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
         }
     }
 
-    override suspend fun getPopularMovies(): List<MovieMinimal> {
-        return service.getTrending().movieMinimals.map {
+    override suspend fun getMoviesList(type: MovieListType): List<MovieMinimal> {
+        return if (type == MovieListType.TRENDING) getTrendingMovies()
+        else service.getMoviesList(type.value).movieMinimals.map {
             it.apply {
                 it.backdropPath = it.backdropPath.getFullPath()
                 it.posterPath = it.posterPath.getFullPath()

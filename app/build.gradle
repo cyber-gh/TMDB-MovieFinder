@@ -161,4 +161,7 @@ dependencies {
 
     //Form validation
     implementation 'com.afollestad:vvalidator:0.5.2'
+
+    //Carousel Layout Manager
+    implementation 'com.azoft.carousellayoutmanager:carousel:1.4.4'
 }

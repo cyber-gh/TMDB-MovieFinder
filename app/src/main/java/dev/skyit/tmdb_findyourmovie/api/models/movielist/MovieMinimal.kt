@@ -14,8 +14,6 @@ data class MovieMinimal(
     val genreIds: List<Int>,
     @SerialName("id")
     val id: Int,
-    @SerialName("media_type")
-    val mediaType: String,
     @SerialName("original_language")
     val originalLanguage: String,
     @SerialName("original_title")

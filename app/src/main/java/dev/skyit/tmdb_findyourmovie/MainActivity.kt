@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
 
     private val binding: ActivityMainBinding by viewBinding(R.id.container)
 
-    val appBarConfiguration: AppBarConfiguration by lazy {
+    private val appBarConfiguration: AppBarConfiguration by lazy {
         AppBarConfiguration(setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_profile))
     }
@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         
     }
 
@@ -53,5 +51,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
             binding.progressIndicator.isVisible = value
         }
 
+    fun setAppBarTitle(title: String) {
+        supportActionBar?.setTitle(title)
+    }
 
 }

@@ -13,6 +13,7 @@ import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.Cast
 import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.Crew
 import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.MovieCredits
 import dev.skyit.tmdb_findyourmovie.api.models.moviedetails.MovieDetails
+import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentMovieDetailsBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemActorBinding
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
@@ -37,12 +38,11 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
         bindUI()
     }
 
-    private fun bindUI() {
-        binding.movieNameLabel.text = args.movieMinimal.title
-        binding.moviePoster.load(args.movieMinimal.backdropPath)
-        binding.movieDescription.text = args.movieMinimal.overview ?: "No description available"
-        binding.simpleRatingBar.rating = (args.movieMinimal.voteAverage / 2).toFloat()
 
+
+    private fun bindUI() {
+
+        prepopulateData(args.movieMinimal)
 
         vModel.movieDetailsLive.observe(viewLifecycleOwner, {
             isLoading = it is LoadingResource.Loading
@@ -58,6 +58,15 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
 
         vModel.loadData()
 
+    }
+
+    private fun prepopulateData(movie: MovieMinimal) {
+        binding.movieNameLabel.text = movie.title
+        binding.moviePoster.load(movie.backdropPath)
+        binding.movieDescription.text = movie.overview ?: "No description available"
+        binding.simpleRatingBar.rating = (movie.voteAverage / 2).toFloat()
+
+        parentActivity.setAppBarTitle(movie.title)
     }
 
     private fun populateDetails(movie: MovieDetails) {

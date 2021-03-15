@@ -3,6 +3,7 @@ package dev.skyit.tmdb_findyourmovie.ui.common
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebViewClient
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -28,5 +29,8 @@ class WebFragment: BaseFragment(R.layout.fragment_web) {
         binding.dismissButton.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.linkViewerTolbar.isVisible = false
+        parentActivity.setAppBarTitle(args.title ?: "Trailer")
     }
 }

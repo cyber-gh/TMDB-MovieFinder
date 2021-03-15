@@ -3,6 +3,7 @@ package dev.skyit.tmdb_findyourmovie.ui.movie_details
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -10,10 +11,10 @@ import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.Cast
-import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.Crew
 import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.MovieCredits
 import dev.skyit.tmdb_findyourmovie.api.models.moviedetails.MovieDetails
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.api.models.movievideo.MovieVideo
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentMovieDetailsBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemActorBinding
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
@@ -52,6 +53,7 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
                 is LoadingResource.Success -> {
                     populateDetails(it.data!!.movieDetails)
                     populateCredits(it.data!!.credits)
+                    setTrailerLink(it.data.videos)
                 }
             }
         })
@@ -67,6 +69,20 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
         binding.simpleRatingBar.rating = (movie.voteAverage / 2).toFloat()
 
         parentActivity.setAppBarTitle(movie.title)
+    }
+
+    private fun setTrailerLink(videos: List<MovieVideo>) {
+        val youtubeVidoe = videos.firstOrNull {
+            it.site == "YouTube"
+        }
+
+        binding.movieTrailer.setOnClickListener {
+            if (youtubeVidoe == null) {
+                errAlert("No available video")
+            } else {
+                findNavController().navigate(MovieDetailsFragmentDirections.actionMovieDetailsFragmentToWebFragment("https://www.youtube.com/watch?v=${youtubeVidoe.key}", youtubeVidoe.name))
+            }
+        }
     }
 
     private fun populateDetails(movie: MovieDetails) {

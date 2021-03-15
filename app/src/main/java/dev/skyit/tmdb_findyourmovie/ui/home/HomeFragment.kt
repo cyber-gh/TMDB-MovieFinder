@@ -52,15 +52,23 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             ListItemMoviePosterBinding.inflate(it)
         }, {data ->
             this.imageView2.load(data.backdropPath)
+            this.imageView2.transitionName = data.id.toString()
             this.movieName.text = data.title
+        }, onItemClick = {v, item ->
+            findNavController().navigate(HomeFragmentDirections
+                .actionNavigationHomeToMovieDetailsFragment(
+                    item, v.imageView2.transitionName, item.id
+                ),
+                FragmentNavigatorExtras(v.imageView2 to v.imageView2.transitionName)
+            )
         })
         binding.trendingMoviesList.adapter = trendingMoviesAdapter
         binding.trendingMoviesList.layoutManager = CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL).apply {
-            setPostLayoutListener(CarouselZoomPostLayoutListener(0.25f))
+            setPostLayoutListener(CarouselZoomPostLayoutListener())
         }
         binding.trendingMoviesList.setHasFixedSize(true)
 
-//        binding.trendingMoviesList.addOnScrollListener(CenterScrollListener())
+        binding.trendingMoviesList.addOnScrollListener(CenterScrollListener())
 
         vModel.trendingMoviesLive.observe(viewLifecycleOwner, {
             trendingMoviesAdapter.updateData(ArrayList(it))

@@ -165,4 +165,7 @@ dependencies {
 
     //Carousel Layout Manager
     implementation 'com.azoft.carousellayoutmanager:carousel:1.4.4'
+
+    //klock
+    implementation("com.soywiz.korlibs.klock:klock-android:2.0.6")
 }

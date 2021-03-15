@@ -51,7 +51,7 @@ class NotificationWorker @AssistedInject constructor(
 
         createNotificationChannel(appContext)
         val builder = NotificationCompat.Builder(appContext, "my_channel")
-                .setContentText("Checkout this new movie ${movie.title}")
+                .setContentText("Checkout this new movie: ${movie.title}")
                 .setContentTitle(movie.title) // Only on api < 26, see createNotificationChannel otherwise
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT) // Default sound, vibration etc
                 .setSmallIcon(R.drawable.ic_star_filled)

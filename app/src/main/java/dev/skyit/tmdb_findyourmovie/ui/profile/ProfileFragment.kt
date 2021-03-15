@@ -76,10 +76,13 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
         super.onResume()
 
 
-        binding.signInBtn.isVisible = vModel.isAuth
+        binding.signInBtn.isVisible = !vModel.isAuth
 
         if (!vModel.isAuth) {
             binding.username.text = "Guest User"
+            binding.moviePreview.setImageResource(R.drawable.profile_pic)
+        } else {
+
         }
     }
 }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
-data class UserDetails(val fullName: String, val email: String, val profilePic: String? = null)
+data class UserDetails(val username: String, val email: String, val profilePic: String? = null)
 
 interface UserRepo {
 
@@ -15,7 +15,7 @@ interface UserRepo {
     val currentUser: UserDetails?
 
     suspend fun login(email: String, pass: String): UserDetails
-    suspend fun signUp(fullName: String, email: String, pass: String)
+    suspend fun signUp(username: String, email: String, pass: String)
 }
 
 class FirebaseUserRepo @Inject constructor(): UserRepo {
@@ -32,9 +32,9 @@ class FirebaseUserRepo @Inject constructor(): UserRepo {
         return currentUser!!
     }
 
-    override suspend fun signUp(fullName: String, email: String, pass: String) {
+    override suspend fun signUp(username: String, email: String, pass: String) {
         auth.createUserWithEmailAndPassword(email, pass).await()
-        auth.currentUser!!.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(fullName).build()).await()
+        auth.currentUser!!.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(username).build()).await()
     }
 
 }

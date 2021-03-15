@@ -24,7 +24,7 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
         super.onViewCreated(view, savedInstanceState)
 
         form {
-            inputLayout(binding.usernameInputField) {
+            inputLayout(binding.emailInputField) {
                 isEmail()
             }
             inputLayout(binding.passwordInputField) {
@@ -32,7 +32,7 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
             }
 
             submitWith(binding.signInButton) {
-                vModel.login(binding.usernameInputField.editText!!.text.toString(), binding.passwordInputField.editText!!.text.toString())
+                vModel.login(binding.emailInputField.editText!!.text.toString(), binding.passwordInputField.editText!!.text.toString())
             }
         }
 

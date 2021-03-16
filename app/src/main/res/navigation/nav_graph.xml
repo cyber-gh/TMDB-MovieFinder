@@ -19,7 +19,11 @@
         android:id="@+id/navigation_my_movies"
         android:name="dev.skyit.tmdb_findyourmovie.ui.mymovies.MyMoviesFragment"
         android:label="@string/title_my_movies"
-        tools:layout="@layout/fragment_my_movies" />
+        tools:layout="@layout/fragment_my_movies" >
+        <action
+            android:id="@+id/action_navigation_my_movies_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -39,8 +43,8 @@
         android:label="@string/movie"
         tools:layout="@layout/fragment_movie_details">
         <argument
-            android:name="movie_minimal"
-            app:argType="dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal" />
+            android:name="movie_db"
+            app:argType="dev.skyit.tmdb_findyourmovie.db.Models.MovieDb" />
         <argument
             android:name="image_transition_id"
             app:argType="string"

@@ -18,6 +18,7 @@ import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.api.models.movievideo.MovieVideo
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentMovieDetailsBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemActorBinding
+import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
@@ -46,7 +47,7 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
             binding.btnMarkWatched.text = "Remove from watched"
 
             binding.btnMarkWatched.setOnClickListener {
-                vModel.removeFromWatched(args.movieMinimal)
+                vModel.removeFromWatched(args.movieDb)
 
                 snack("Removed from watched")
 
@@ -61,13 +62,13 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
 
 
         binding.btnAddWatchLater.setOnClickListener {
-            vModel.addToWatchLater(args.movieMinimal)
+            vModel.addToWatchLater(args.movieDb)
 
             snack(getString(R.string.added_watch_later))
         }
 
         binding.btnMarkWatched.setOnClickListener {
-            vModel.markAsWatched(args.movieMinimal)
+            vModel.markAsWatched(args.movieDb)
 
             snack("Marked as Watched")
 
@@ -81,7 +82,7 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
 
     private fun bindUI() {
 
-        prepopulateData(args.movieMinimal)
+        prepopulateData(args.movieDb)
 
         vModel.movieDetailsLive.observe(viewLifecycleOwner, {
             isLoading = it is LoadingResource.Loading
@@ -101,7 +102,7 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
 
     }
 
-    private fun prepopulateData(movie: MovieMinimal) {
+    private fun prepopulateData(movie: MovieDb) {
         binding.movieNameLabel.text = movie.title
         binding.moviePoster.load(movie.backdropPath)
         binding.movieDescription.text = movie.overview ?: "No description available"

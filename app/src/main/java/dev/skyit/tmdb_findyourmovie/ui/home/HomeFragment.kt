@@ -21,6 +21,7 @@ import dev.skyit.tmdb_findyourmovie.databinding.FragmentHomeBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemMovieMinimalBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemMoviePosterBinding
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
+import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
 
@@ -57,7 +58,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }, onItemClick = {v, item ->
             findNavController().navigate(HomeFragmentDirections
                 .actionNavigationHomeToMovieDetailsFragment(
-                    item, v.imageView2.transitionName, item.id
+                    item.toDbFormat(), v.imageView2.transitionName, item.id
                 ),
                 FragmentNavigatorExtras(v.imageView2 to v.imageView2.transitionName)
             )
@@ -90,7 +91,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }, onItemClick = { v, item ->
             findNavController().navigate(HomeFragmentDirections
                 .actionNavigationHomeToMovieDetailsFragment(
-                    item, v.moviePreview.transitionName, item.id
+                    item.toDbFormat(), v.moviePreview.transitionName, item.id
                 ),
                 FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
             )

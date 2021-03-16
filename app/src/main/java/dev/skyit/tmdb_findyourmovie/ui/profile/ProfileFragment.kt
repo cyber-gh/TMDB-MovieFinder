@@ -18,6 +18,7 @@ import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentProfileBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemRecentlyWatchedBinding
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
+import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
 import dev.skyit.tmdb_findyourmovie.ui.signin.SignInFragmentDirections
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
@@ -47,7 +48,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
         }, onItemClick = { v, item ->
             findNavController().navigate(ProfileFragmentDirections
                 .actionNavigationProfileToMovieDetailsFragment(
-                    item, v.moviePreview.transitionName, item.id
+                    item.toDbFormat(), v.moviePreview.transitionName, item.id
                 ),
                 FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
             )

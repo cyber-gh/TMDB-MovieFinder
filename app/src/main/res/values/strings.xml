@@ -17,4 +17,6 @@
     <string name="movie">Movie</string>
     <string name="title_my_movies">My movies</string>
     <string name="added_watch_later">Added to Watch Later</string>
+    <string name="watch_later_text">Watch Later</string>
+    <string name="already_watched_text">Already Watched</string>
 </resources>

@@ -14,6 +14,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.ActivityMainBinding
+import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
+import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
 import dev.skyit.tmdb_findyourmovie.ui.movie_details.MovieDetailsFragmentArgs
 import dev.skyit.tmdb_findyourmovie.ui.utils.Loadable
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
@@ -80,7 +82,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
         val movie: MovieMinimal = it.getSerializableExtra("movieDetails") as MovieMinimal
 
 
-        findNavController(R.id.nav_host_fragment).navigate(R.id.movieDetailsFragment, MovieDetailsFragmentArgs(movie, null, movie.id).toBundle())
+        findNavController(R.id.nav_host_fragment).navigate(R.id.movieDetailsFragment, MovieDetailsFragmentArgs(movie.toDbFormat(), null, movie.id).toBundle())
     }
 
 }

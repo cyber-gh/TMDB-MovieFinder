@@ -70,3 +70,17 @@ fun MovieMinimal.toDbFormat(): MovieDb {
         backdropPath, posterPath, releaseDate
     )
 }
+
+//fun MovieDb.toApiFormat(): MovieMinimal {
+//    return MovieMinimal(
+//        id = id,
+//        title = title,
+//        overview = overview,
+//        voteAverage = voteAverage,
+//        backdropPath = backdropPath,
+//        posterPath = posterPath,
+//        releaseDate = releaseDate,
+//        adult = false,
+//
+//    )
+//}

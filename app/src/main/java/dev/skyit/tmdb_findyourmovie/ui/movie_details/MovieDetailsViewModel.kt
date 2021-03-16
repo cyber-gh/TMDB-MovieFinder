@@ -10,6 +10,7 @@ import dev.skyit.tmdb_findyourmovie.api.models.moviecredits.MovieCredits
 import dev.skyit.tmdb_findyourmovie.api.models.moviedetails.MovieDetails
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.api.models.movievideo.MovieVideo
+import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.repo.MoviesToWatchRepo
 import dev.skyit.tmdb_findyourmovie.repo.WatchedMoviesRepo
 import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
@@ -54,21 +55,21 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    fun addToWatchLater(movie: MovieMinimal) {
+    fun addToWatchLater(movie: MovieDb) {
         viewModelScope.launch {
-            moviesToWatchRepo.addMovie(movie.toDbFormat())
+            moviesToWatchRepo.addMovie(movie)
         }
     }
 
-    fun markAsWatched(movie: MovieMinimal) {
+    fun markAsWatched(movie: MovieDb) {
         viewModelScope.launch {
-            watchedMoviesRepo.addMovie(movie.toDbFormat())
+            watchedMoviesRepo.addMovie(movie)
         }
     }
 
-    fun removeFromWatched(movie: MovieMinimal) {
+    fun removeFromWatched(movie: MovieDb) {
         viewModelScope.launch {
-            watchedMoviesRepo.deleteMovie(movie.toDbFormat())
+            watchedMoviesRepo.deleteMovie(movie)
         }
     }
 

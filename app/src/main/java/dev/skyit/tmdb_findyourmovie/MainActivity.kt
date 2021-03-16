@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
 
     private val appBarConfiguration: AppBarConfiguration by lazy {
         AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_my_movies, R.id.navigation_profile))
+                R.id.navigation_home, R.id.navigation_my_movies, R.id.navigation_search, R.id.navigation_profile))
     }
 
 

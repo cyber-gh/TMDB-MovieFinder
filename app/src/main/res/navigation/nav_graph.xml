@@ -16,6 +16,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_search"
+        android:name="dev.skyit.tmdb_findyourmovie.ui.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_my_movies"
         android:name="dev.skyit.tmdb_findyourmovie.ui.mymovies.MyMoviesFragment"
         android:label="@string/title_my_movies"

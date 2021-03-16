@@ -14,9 +14,11 @@ import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import javax.inject.Inject
 
 
@@ -61,6 +63,11 @@ interface IMoviesAPIClient {
         suspend fun getVideos(
             @Path("movie_id") movieId: Int
         ): MovieVideos
+
+        @GET("search/movie")
+        suspend fun getMoviesFiltered(
+            @Query("query") query: String
+        ): MoviesResult
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
@@ -71,7 +78,7 @@ interface IMoviesAPIClient {
     suspend fun getMovieCredits(movieId: Int): MovieCredits
     suspend fun getMovieVideos(movieId: Int): List<MovieVideo>
 
-
+    suspend fun getMoviesFiltered(filter: String): List<MovieMinimal>
 }
 
 class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
@@ -81,6 +88,9 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
     private val apiKey = "9298ce2adec59153432766a85f544355"
 
     private val httpClient: OkHttpClient by lazy {
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
         OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val original: Request = chain.request()
@@ -95,7 +105,7 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
 
                     val request: Request = requestBuilder.build()
                     chain.proceed(request)
-                }
+                }.addInterceptor(interceptor)
                 .build()
     }
 
@@ -129,8 +139,8 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
     override suspend fun getTrendingMovies(): List<MovieMinimal> {
         return service.getTrending().movieMinimals.map {
             it.apply {
-                it.backdropPath = it.backdropPath.getFullPath()
-                it.posterPath = it.posterPath.getFullPath()
+                it.backdropPath = it.backdropPath?.getFullPath()
+                it.posterPath = it.posterPath?.getFullPath()
             }
         }
     }
@@ -139,8 +149,8 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
         return if (type == MovieListType.TRENDING) getTrendingMovies()
         else service.getMoviesList(type.value).movieMinimals.map {
             it.apply {
-                it.backdropPath = it.backdropPath.getFullPath()
-                it.posterPath = it.posterPath.getFullPath()
+                it.backdropPath = it.backdropPath?.getFullPath()
+                it.posterPath = it.posterPath?.getFullPath()
             }
         }
     }
@@ -171,5 +181,14 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
 
     override suspend fun getMovieVideos(movieId: Int): List<MovieVideo> {
         return service.getVideos(movieId).movieVideos
+    }
+
+    override suspend fun getMoviesFiltered(filter: String): List<MovieMinimal> {
+        return service.getMoviesFiltered(filter).movieMinimals.map {
+            it.apply {
+                it.backdropPath = it.backdropPath?.getFullPath()
+                it.posterPath = it.posterPath?.getFullPath()
+            }
+        }
     }
 }

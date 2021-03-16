@@ -27,6 +27,7 @@ import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
 import dev.skyit.tmdb_findyourmovie.ui.profile.ProfileFragmentDirections
 import dev.skyit.tmdb_findyourmovie.ui.profile.ProfileViewModel
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
+import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
@@ -62,6 +63,10 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
         vModel.searchResults.observe(viewLifecycleOwner, {
             filteredMoviesAdapter.updateData(ArrayList(it))
+        })
+
+        vModel.errorState.observe(viewLifecycleOwner, {
+            errAlert("Error ${it}")
         })
     }
 

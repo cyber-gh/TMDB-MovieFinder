@@ -5,16 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
-import dev.skyit.tmdb_findyourmovie.repo.UserRepo
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-import androidx.lifecycle.viewModelScope
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
+import dev.skyit.tmdb_findyourmovie.ui.utils.snack
+import dev.skyit.tmdb_findyourmovie.utils.SingleLiveEvent
 
 @HiltViewModel
 class SearchViewModel@Inject constructor(
@@ -23,6 +21,7 @@ class SearchViewModel@Inject constructor(
 
     val searchResults = MutableLiveData<List<MovieMinimal>>()
     private val searchQFlow = Channel<String>()
+    val errorState: SingleLiveEvent<String> = SingleLiveEvent()
 
     init {
         viewModelScope.launch {
@@ -41,6 +40,7 @@ class SearchViewModel@Inject constructor(
             searchResults.postValue(it)
         }.onFailure {
             Timber.e(it, "API error")
+            errorState.postValue(it.localizedMessage)
         }
     }
 

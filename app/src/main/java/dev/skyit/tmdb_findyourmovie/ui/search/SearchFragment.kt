@@ -41,7 +41,11 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             ListItemSearchBinding.inflate(it)
         }, { data ->
             this.moviePreview.transitionName = data.id.toString()
-            this.moviePreview.load(data.posterPath)
+            if (data.posterPath == null) {
+                this.moviePreview.setImageResource(R.drawable.no_photo)
+            } else {
+                this.moviePreview.load(data.posterPath)
+            }
             this.movieTitle.text = data.title
             this.movieYear.text = data.releaseDate.take(4)
 

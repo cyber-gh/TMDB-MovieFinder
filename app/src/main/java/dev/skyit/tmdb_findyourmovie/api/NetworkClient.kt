@@ -71,7 +71,7 @@ interface IMoviesAPIClient {
     suspend fun getMovieCredits(movieId: Int): MovieCredits
     suspend fun getMovieVideos(movieId: Int): List<MovieVideo>
 
-
+    suspend fun getMoviesFiltered(filter: String): List<MovieMinimal>
 }
 
 class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
@@ -171,5 +171,16 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
 
     override suspend fun getMovieVideos(movieId: Int): List<MovieVideo> {
         return service.getVideos(movieId).movieVideos
+    }
+
+    override suspend fun getMoviesFiltered(filter: String): List<MovieMinimal> {
+        return service.getTrending().movieMinimals.map {
+            it.apply {
+                it.backdropPath = it.backdropPath.getFullPath()
+                it.posterPath = it.posterPath.getFullPath()
+            }
+        }.filter {
+            it.title.contains(filter, true)
+        }
     }
 }

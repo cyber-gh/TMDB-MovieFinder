@@ -12,6 +12,7 @@ import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.api.models.movievideo.MovieVideo
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.repo.MoviesToWatchRepo
+import dev.skyit.tmdb_findyourmovie.repo.RecentlyWatchedRepo
 import dev.skyit.tmdb_findyourmovie.repo.WatchedMoviesRepo
 import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
@@ -30,6 +31,7 @@ class MovieDetailsViewModel @Inject constructor(
         private val apiClient: IMoviesAPIClient,
         private val moviesToWatchRepo: MoviesToWatchRepo,
         private val watchedMoviesRepo: WatchedMoviesRepo,
+        private val recentlyWatchedRepo: RecentlyWatchedRepo,
         private val state: SavedStateHandle
 ) : ViewModel() {
 
@@ -73,5 +75,10 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
+    fun addToRecentlyWatched(movie: MovieDb) {
+        viewModelScope.launch {
+            recentlyWatchedRepo.addMovie(movie)
+        }
+    }
 
 }

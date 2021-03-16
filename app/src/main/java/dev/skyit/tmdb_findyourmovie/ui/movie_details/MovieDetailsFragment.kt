@@ -39,6 +39,8 @@ class MovieDetailsFragment : BaseFragment(R.layout.fragment_movie_details) {
         super.onViewCreated(view, savedInstanceState)
 
         bindUI()
+
+        vModel.addToRecentlyWatched(args.movieDb)
     }
 
     private fun setupListeners(didWatch: Boolean) {

@@ -6,6 +6,7 @@ import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieToWatch
 import dev.skyit.tmdb_findyourmovie.db.Models.WatchedMovie
 import dev.skyit.tmdb_findyourmovie.db.dao.MoviesDao
+import dev.skyit.tmdb_findyourmovie.db.dao.MoviesRecentlyWatchedDao
 import dev.skyit.tmdb_findyourmovie.db.dao.MoviesToWatchDao
 import dev.skyit.tmdb_findyourmovie.db.dao.WatchedMoviesDao
 import javax.inject.Inject
@@ -61,6 +62,29 @@ class WatchedMoviesRepoImpl @Inject constructor(private val db: AppDatabase): Wa
     }
 }
 
+
+interface RecentlyWatchedRepo {
+    suspend fun getAllMovies(): List<MovieDb>
+    suspend fun addMovie(movie: MovieDb)
+    suspend fun deleteMovie(movieDb: MovieDb)
+}
+
+class RecentlyWatchedRepoImpl @Inject constructor(private val db: AppDatabase): RecentlyWatchedRepo {
+    private val mDao: MoviesDao = db.moviesDao()
+
+    override suspend fun getAllMovies(): List<MovieDb> {
+        return mDao.getAll()
+    }
+
+    override suspend fun addMovie(movie: MovieDb) {
+        mDao.insertMovie(movie)
+    }
+
+    override suspend fun deleteMovie(movieDb: MovieDb) {
+        mDao.deleteMovie(movieDb)
+    }
+}
+
 fun MovieMinimal.toDbFormat(): MovieDb {
     return MovieDb(
         id = id,
@@ -70,17 +94,3 @@ fun MovieMinimal.toDbFormat(): MovieDb {
         backdropPath ?: "", posterPath ?: "", releaseDate
     )
 }
-
-//fun MovieDb.toApiFormat(): MovieMinimal {
-//    return MovieMinimal(
-//        id = id,
-//        title = title,
-//        overview = overview,
-//        voteAverage = voteAverage,
-//        backdropPath = backdropPath,
-//        posterPath = posterPath,
-//        releaseDate = releaseDate,
-//        adult = false,
-//
-//    )
-//}

@@ -91,14 +91,8 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
         })
     }
 
-    private fun bindUI() {
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        bindUI()
 
         buildWatchLaterList()
         buildAlreadyWatchedList()

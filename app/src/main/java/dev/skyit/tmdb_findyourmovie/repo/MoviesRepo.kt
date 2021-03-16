@@ -61,6 +61,29 @@ class WatchedMoviesRepoImpl @Inject constructor(private val db: AppDatabase): Wa
     }
 }
 
+
+interface RecentlyWatchedRepo {
+    suspend fun getAllMovies(): List<MovieDb>
+    suspend fun addMovie(movie: MovieDb)
+    suspend fun deleteMovie(movieDb: MovieDb)
+}
+
+class RecentlyWatchedRepoImpl @Inject constructor(private val db: AppDatabase): RecentlyWatchedRepo{
+    private val mDao: MoviesDao = db.moviesDao()
+
+    override suspend fun getAllMovies(): List<MovieDb> {
+        return mDao.getAll()
+    }
+
+    override suspend fun addMovie(movie: MovieDb) {
+        mDao.insertMovie(movie)
+    }
+
+    override suspend fun deleteMovie(movie: MovieDb) {
+        mDao.deleteMovie(movie)
+    }
+}
+
 fun MovieMinimal.toDbFormat(): MovieDb {
     return MovieDb(
         id = id,

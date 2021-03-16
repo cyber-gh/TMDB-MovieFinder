@@ -6,6 +6,7 @@ import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieToWatch
 import dev.skyit.tmdb_findyourmovie.db.Models.WatchedMovie
 import dev.skyit.tmdb_findyourmovie.db.dao.MoviesDao
+import dev.skyit.tmdb_findyourmovie.db.dao.MoviesRecentlyWatchedDao
 import dev.skyit.tmdb_findyourmovie.db.dao.MoviesToWatchDao
 import dev.skyit.tmdb_findyourmovie.db.dao.WatchedMoviesDao
 import javax.inject.Inject
@@ -68,7 +69,7 @@ interface RecentlyWatchedRepo {
     suspend fun deleteMovie(movieDb: MovieDb)
 }
 
-class RecentlyWatchedRepoImpl @Inject constructor(private val db: AppDatabase): RecentlyWatchedRepo{
+class RecentlyWatchedRepoImpl @Inject constructor(private val db: AppDatabase): RecentlyWatchedRepo {
     private val mDao: MoviesDao = db.moviesDao()
 
     override suspend fun getAllMovies(): List<MovieDb> {
@@ -79,8 +80,8 @@ class RecentlyWatchedRepoImpl @Inject constructor(private val db: AppDatabase): 
         mDao.insertMovie(movie)
     }
 
-    override suspend fun deleteMovie(movie: MovieDb) {
-        mDao.deleteMovie(movie)
+    override suspend fun deleteMovie(movieDb: MovieDb) {
+        mDao.deleteMovie(movieDb)
     }
 }
 

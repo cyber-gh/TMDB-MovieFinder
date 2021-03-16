@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
+import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
+import dev.skyit.tmdb_findyourmovie.repo.RecentlyWatchedRepo
 import dev.skyit.tmdb_findyourmovie.repo.UserDetails
 import dev.skyit.tmdb_findyourmovie.repo.UserRepo
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
@@ -16,9 +18,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-        private val api: IMoviesAPIClient,
-        private val userRepo: UserRepo
+        private val userRepo: UserRepo,
+        private val recentlyWatchedRepo: RecentlyWatchedRepo
 ) : ViewModel() {
+    val recentlyWatchedList: MutableLiveData<List<MovieDb>> = MutableLiveData()
+
     val isAuth: Boolean
         get() = userRepo.isAuthenticated
 
@@ -27,14 +31,10 @@ class ProfileViewModel @Inject constructor(
     val username: String
         get() = userRepo.currentUser!!.username
 
-    fun loadData() {
+    fun loadRecentlyWatched() {
         viewModelScope.launch {
-
-            val movies = api.getTrendingMovies()
-            moviesList.postValue(movies)
-
-            Timber.i("Movies are")
-            Timber.i(movies.toString())
+            val movies = recentlyWatchedRepo.getAllMovies().take(30)
+            recentlyWatchedList.postValue(movies)
         }
     }
 
@@ -45,5 +45,4 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    val moviesList: MutableLiveData<List<MovieMinimal>> = MutableLiveData()
 }

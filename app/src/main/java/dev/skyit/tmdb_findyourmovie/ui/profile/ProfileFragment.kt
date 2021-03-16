@@ -17,6 +17,7 @@ import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentProfileBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemRecentlyWatchedBinding
+import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
 import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
 import dev.skyit.tmdb_findyourmovie.ui.signin.SignInFragmentDirections
@@ -31,7 +32,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
     private val vModel: ProfileViewModel by viewModels()
     private val binding: FragmentProfileBinding by viewBinding()
 
-    private lateinit var recentlyWatchedMoviesAdapter: SimpleRecyclerAdapter<MovieMinimal, ListItemRecentlyWatchedBinding>
+    private lateinit var recentlyWatchedMoviesAdapter: SimpleRecyclerAdapter<MovieDb, ListItemRecentlyWatchedBinding>
 
     private fun buildRecentlyWatchedList() {
         recentlyWatchedMoviesAdapter = SimpleRecyclerAdapter({
@@ -48,7 +49,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
         }, onItemClick = { v, item ->
             findNavController().navigate(ProfileFragmentDirections
                 .actionNavigationProfileToMovieDetailsFragment(
-                    item.toDbFormat(), v.moviePreview.transitionName, item.id
+                    item, v.moviePreview.transitionName, item.id
                 ),
                 FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
             )
@@ -57,12 +58,12 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
         binding.recentlyWatchedList.adapter = recentlyWatchedMoviesAdapter
         binding.recentlyWatchedList.layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
 
-        vModel.moviesList.observe(viewLifecycleOwner, {
+        vModel.recentlyWatchedList.observe(viewLifecycleOwner, {
             recentlyWatchedMoviesAdapter.updateData(ArrayList(it))
         })
 
 
-        vModel.loadData()
+        vModel.loadRecentlyWatched()
     }
 
     private fun bindUI() {

@@ -14,6 +14,7 @@ import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -87,6 +88,9 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
     private val apiKey = "9298ce2adec59153432766a85f544355"
 
     private val httpClient: OkHttpClient by lazy {
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
         OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val original: Request = chain.request()
@@ -101,7 +105,7 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
 
                     val request: Request = requestBuilder.build()
                     chain.proceed(request)
-                }
+                }.addInterceptor(interceptor)
                 .build()
     }
 
@@ -135,8 +139,8 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
     override suspend fun getTrendingMovies(): List<MovieMinimal> {
         return service.getTrending().movieMinimals.map {
             it.apply {
-                it.backdropPath = it.backdropPath.getFullPath()
-                it.posterPath = it.posterPath.getFullPath()
+                it.backdropPath = it.backdropPath?.getFullPath()
+                it.posterPath = it.posterPath?.getFullPath()
             }
         }
     }
@@ -145,8 +149,8 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
         return if (type == MovieListType.TRENDING) getTrendingMovies()
         else service.getMoviesList(type.value).movieMinimals.map {
             it.apply {
-                it.backdropPath = it.backdropPath.getFullPath()
-                it.posterPath = it.posterPath.getFullPath()
+                it.backdropPath = it.backdropPath?.getFullPath()
+                it.posterPath = it.posterPath?.getFullPath()
             }
         }
     }
@@ -182,8 +186,8 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
     override suspend fun getMoviesFiltered(filter: String): List<MovieMinimal> {
         return service.getMoviesFiltered(filter).movieMinimals.map {
             it.apply {
-                it.backdropPath = it.backdropPath.getFullPath()
-                it.posterPath = it.posterPath.getFullPath()
+                it.backdropPath = it.backdropPath?.getFullPath()
+                it.posterPath = it.posterPath?.getFullPath()
             }
         }
     }

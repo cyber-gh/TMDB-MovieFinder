@@ -67,7 +67,7 @@ fun MovieMinimal.toDbFormat(): MovieDb {
         title = title,
         overview=overview,
         voteAverage = voteAverage,
-        backdropPath, posterPath, releaseDate
+        backdropPath ?: "", posterPath ?: "", releaseDate
     )
 }
 

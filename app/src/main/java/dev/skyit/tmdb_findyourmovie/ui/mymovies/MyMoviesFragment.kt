@@ -19,6 +19,7 @@ import dev.skyit.tmdb_findyourmovie.databinding.FragmentMyMoviesBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemMovieAlreadyWatchedBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemMovieWatchLaterBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemRecentlyWatchedBinding
+import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
 import dev.skyit.tmdb_findyourmovie.ui.profile.ProfileFragmentDirections
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
@@ -29,8 +30,8 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
     private val vModel: MyMoviesViewModel by viewModels()
     private val binding: FragmentMyMoviesBinding by viewBinding()
 
-    private lateinit var watchLaterAdapter: SimpleRecyclerAdapter<MovieMinimal, ListItemMovieWatchLaterBinding>
-    private lateinit var alreadyWatchedAdapter: SimpleRecyclerAdapter<MovieMinimal, ListItemMovieAlreadyWatchedBinding>
+    private lateinit var watchLaterAdapter: SimpleRecyclerAdapter<MovieDb, ListItemMovieWatchLaterBinding>
+    private lateinit var alreadyWatchedAdapter: SimpleRecyclerAdapter<MovieDb, ListItemMovieAlreadyWatchedBinding>
 
     private fun buildWatchLaterList() {
         watchLaterAdapter = SimpleRecyclerAdapter({
@@ -44,18 +45,18 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
                     .data(data.backdropPath)
                     .build())
         }, onItemClick = { v, item ->
-            findNavController().navigate(ProfileFragmentDirections
-                    .actionNavigationProfileToMovieDetailsFragment(
-                            item, v.moviePreview.transitionName, item.id
-                    ),
-                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
-            )
+//            findNavController().navigate(MyMoviesFragmentDirections
+//                    .actionNavigationMyMoviesToMovieDetailsFragment(
+//                            item, v.moviePreview.transitionName, item.id
+//                    ),
+//                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
+//            )
         })
 
         binding.watchLaterList.adapter = watchLaterAdapter
         binding.watchLaterList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        vModel.moviesList.observe(viewLifecycleOwner, {
+        vModel.toWatchMoviesList.observe(viewLifecycleOwner, {
             watchLaterAdapter.updateData(ArrayList(it))
         })
 
@@ -74,18 +75,18 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
                     .data(data.backdropPath)
                     .build())
         }, onItemClick = { v, item ->
-            findNavController().navigate(ProfileFragmentDirections
-                    .actionNavigationProfileToMovieDetailsFragment(
-                            item, v.moviePreview.transitionName, item.id
-                    ),
-                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
-            )
+//            findNavController().navigate(ProfileFragmentDirections
+//                    .actionNavigationProfileToMovieDetailsFragment(
+//                            item, v.moviePreview.transitionName, item.id
+//                    ),
+//                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
+//            )
         })
 
         binding.alreadyWatchedList.adapter = alreadyWatchedAdapter
         binding.alreadyWatchedList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        vModel.moviesList.observe(viewLifecycleOwner, {
+        vModel.watchedMoviesList.observe(viewLifecycleOwner, {
             alreadyWatchedAdapter.updateData(ArrayList(it))
         })
     }
@@ -101,6 +102,7 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
 
         buildWatchLaterList()
         buildAlreadyWatchedList()
-        vModel.loadData()
+        vModel.loadWatchLaterMovies()
+        vModel.loadWatchedMovies()
     }
 }

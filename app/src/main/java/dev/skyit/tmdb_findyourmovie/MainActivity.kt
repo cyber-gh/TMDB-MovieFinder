@@ -14,6 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.ActivityMainBinding
+import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.ui.movie_details.MovieDetailsFragmentArgs
 import dev.skyit.tmdb_findyourmovie.ui.utils.Loadable
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Loadable {
         val idx = it.getIntExtra("movieId", -1)
         if (idx == -1) return
 //        else errAlert("The id is ${idx}")
-        val movie: MovieMinimal = it.getSerializableExtra("movieDetails") as MovieMinimal
+        val movie: MovieDb = it.getSerializableExtra("movieDetails") as MovieDb
 
 
         findNavController(R.id.nav_host_fragment).navigate(R.id.movieDetailsFragment, MovieDetailsFragmentArgs(movie, null, movie.id).toBundle())

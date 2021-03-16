@@ -17,6 +17,7 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import javax.inject.Inject
 
 
@@ -61,6 +62,11 @@ interface IMoviesAPIClient {
         suspend fun getVideos(
             @Path("movie_id") movieId: Int
         ): MovieVideos
+
+        @GET("search/movie")
+        suspend fun getMoviesFiltered(
+            @Query("query") query: String
+        ): MoviesResult
     }
 
     suspend fun getTrendingMovies(): List<MovieMinimal>
@@ -174,13 +180,11 @@ class MoviesApiClient @Inject constructor(): IMoviesAPIClient {
     }
 
     override suspend fun getMoviesFiltered(filter: String): List<MovieMinimal> {
-        return service.getTrending().movieMinimals.map {
+        return service.getMoviesFiltered(filter).movieMinimals.map {
             it.apply {
                 it.backdropPath = it.backdropPath.getFullPath()
                 it.posterPath = it.posterPath.getFullPath()
             }
-        }.filter {
-            it.title.contains(filter, true)
         }
     }
 }

@@ -6,7 +6,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Entity(tableName = "Movies")
-@Serializable
 data class MovieDb(
     @PrimaryKey
     val id: Int,

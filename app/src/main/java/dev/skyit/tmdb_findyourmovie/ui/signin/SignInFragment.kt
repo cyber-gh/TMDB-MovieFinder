@@ -46,7 +46,7 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
 
             vModel.signInWithFirebase(account.idToken!!)
         } catch (ex: Exception) {
-            errAlert(ex.localizedMessage)
+            toastl(ex.localizedMessage)
         }
 
     }

@@ -6,7 +6,6 @@ import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieToWatch
 import dev.skyit.tmdb_findyourmovie.db.Models.WatchedMovie
 import dev.skyit.tmdb_findyourmovie.db.dao.MoviesDao
-import dev.skyit.tmdb_findyourmovie.db.dao.MoviesRecentlyWatchedDao
 import dev.skyit.tmdb_findyourmovie.db.dao.MoviesToWatchDao
 import dev.skyit.tmdb_findyourmovie.db.dao.WatchedMoviesDao
 import javax.inject.Inject

@@ -40,18 +40,18 @@ class BaseApp : Application(), Configuration.Provider {
             (target - now).seconds
         }
 
-        val work = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.DAYS)
-                .setInitialDelay(delay.toLong(), TimeUnit.SECONDS)
-            .build()
+//        val work = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.DAYS)
+//                .setInitialDelay(delay.toLong(), TimeUnit.SECONDS)
+//            .build()
 
 
         //-----------------
         // USE THIS WORK FOR TESTING
         //-----------------
 
-//        val work = PeriodicWorkRequestBuilder<NotificationWorker>(16, TimeUnit.MINUTES)
-//                .setInitialDelay(10, TimeUnit.SECONDS)
-//                .build()
+        val work = PeriodicWorkRequestBuilder<NotificationWorker>(16, TimeUnit.MINUTES)
+                .setInitialDelay(10, TimeUnit.SECONDS)
+                .build()
 
 
         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("send_notification",ExistingPeriodicWorkPolicy.REPLACE, work)

@@ -45,12 +45,12 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
                     .data(data.backdropPath)
                     .build())
         }, onItemClick = { v, item ->
-//            findNavController().navigate(MyMoviesFragmentDirections
-//                    .actionNavigationMyMoviesToMovieDetailsFragment(
-//                            item, v.moviePreview.transitionName, item.id
-//                    ),
-//                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
-//            )
+            findNavController().navigate(MyMoviesFragmentDirections
+                    .actionNavigationMyMoviesToMovieDetailsFragment(
+                            item, v.moviePreview.transitionName, item.id
+                    ),
+                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
+            )
         })
 
         binding.watchLaterList.adapter = watchLaterAdapter
@@ -75,12 +75,12 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
                     .data(data.backdropPath)
                     .build())
         }, onItemClick = { v, item ->
-//            findNavController().navigate(ProfileFragmentDirections
-//                    .actionNavigationProfileToMovieDetailsFragment(
-//                            item, v.moviePreview.transitionName, item.id
-//                    ),
-//                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
-//            )
+            findNavController().navigate(MyMoviesFragmentDirections
+                .actionNavigationMyMoviesToMovieDetailsFragment(
+                    item, v.moviePreview.transitionName, item.id
+                ),
+                FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
+            )
         })
 
         binding.alreadyWatchedList.adapter = alreadyWatchedAdapter

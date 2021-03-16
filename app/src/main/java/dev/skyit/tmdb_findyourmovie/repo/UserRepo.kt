@@ -1,5 +1,6 @@
 package dev.skyit.tmdb_findyourmovie.repo
 
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
@@ -15,6 +16,7 @@ interface UserRepo {
     val currentUser: UserDetails?
 
     suspend fun login(email: String, pass: String): UserDetails
+    suspend fun loginWithCredential(credential: AuthCredential): UserDetails
     suspend fun signUp(username: String, email: String, pass: String): UserDetails
     suspend fun signOut()
 }
@@ -30,6 +32,11 @@ class FirebaseUserRepo @Inject constructor(): UserRepo {
 
     override suspend fun login(email: String, pass: String): UserDetails {
         auth.signInWithEmailAndPassword(email, pass).await()
+        return currentUser!!
+    }
+
+    override suspend fun loginWithCredential(credential: AuthCredential): UserDetails {
+        auth.signInWithCredential(credential).await()
         return currentUser!!
     }
 

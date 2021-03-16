@@ -8,7 +8,7 @@ import dev.skyit.tmdb_findyourmovie.db.Models.WatchedMovie
 
 @Dao
 interface WatchedMoviesDao {
-    @Query("select mv.id, title, voteAverage, backdropPath, posterPath, releaseDate from watchedMovies mt join movies mv on mt.id=mv.id")
+    @Query("select mv.id, title, voteAverage, backdropPath, posterPath, releaseDate, overview from watchedMovies mt join movies mv on mt.id=mv.id")
     suspend fun getAll(): List<MovieDb>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

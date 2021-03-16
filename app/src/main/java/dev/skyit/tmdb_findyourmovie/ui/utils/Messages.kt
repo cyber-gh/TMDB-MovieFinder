@@ -29,6 +29,10 @@ fun Fragment.errAlert(msg: String) {
     requireContext().errAlert(msg)
 }
 
+fun Fragment.toastl(msg: String) {
+    requireContext().toastl(msg)
+}
+
 fun Context.toastl(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 }

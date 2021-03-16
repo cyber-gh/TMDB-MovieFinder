@@ -110,7 +110,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     implementation 'com.google.firebase:firebase-auth-ktx'
-
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
     // Material dialogs
     implementation 'com.afollestad.material-dialogs:core:3.1.1'
     implementation 'com.afollestad.material-dialogs:input:3.1.1'

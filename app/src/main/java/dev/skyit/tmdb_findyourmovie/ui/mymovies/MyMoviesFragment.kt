@@ -59,11 +59,35 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
             watchLaterAdapter.updateData(ArrayList(it))
         })
 
-        vModel.loadData()
     }
 
     private fun buildAlreadyWatchedList() {
+        alreadyWatchedAdapter = SimpleRecyclerAdapter({
+            ListItemMovieAlreadyWatchedBinding.inflate(it)
+        }, { data ->
+            this.moviePreview.transitionName = data.id.toString()
+            this.moviePreview.load(data.posterPath)
+            this.movieTitle.text = data.title
+            this.movieYear.text = data.releaseDate.take(4)
 
+            Coil.enqueue(ImageRequest.Builder(requireContext())
+                    .data(data.backdropPath)
+                    .build())
+        }, onItemClick = { v, item ->
+            findNavController().navigate(ProfileFragmentDirections
+                    .actionNavigationProfileToMovieDetailsFragment(
+                            item, v.moviePreview.transitionName, item.id
+                    ),
+                    FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
+            )
+        })
+
+        binding.alreadyWatchedList.adapter = alreadyWatchedAdapter
+        binding.alreadyWatchedList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        vModel.moviesList.observe(viewLifecycleOwner, {
+            alreadyWatchedAdapter.updateData(ArrayList(it))
+        })
     }
 
     private fun bindUI() {
@@ -76,7 +100,7 @@ class MyMoviesFragment : BaseFragment(R.layout.fragment_my_movies) {
         bindUI()
 
         buildWatchLaterList()
-
         buildAlreadyWatchedList()
+        vModel.loadData()
     }
 }

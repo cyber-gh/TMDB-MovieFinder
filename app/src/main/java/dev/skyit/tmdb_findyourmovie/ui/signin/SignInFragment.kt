@@ -3,6 +3,7 @@ package dev.skyit.tmdb_findyourmovie.ui.signin
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -23,13 +24,32 @@ import dev.skyit.tmdb_findyourmovie.ui.utils.toastl
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 import timber.log.Timber
 import java.lang.Exception
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
 
-    private val RC_SIGN_IN: Int = 8791
     private val vModel: SignInViewModel by viewModels()
     private val binding: FragmentSignInBinding by viewBinding()
+
+    @Inject
+    lateinit var googleSignInClient: GoogleSignInClient
+
+    //WHY here?, Because
+    //Fragment SignInFragment{7732b77} (1d1a6e0c-031c-4b93-ab2c-187a3c244654) id=0x7f0a0145} is attempting to registerForActivityResult after being created. Fragments must call registerForActivityResult() before they are created (i.e. initialization, onAttach(), or onCreate()).
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+
+        try {
+            val account = task.getResult(ApiException::class.java)!!
+            toastl("Logged in with ${account.email}")
+
+            vModel.signInWithFirebase(account.idToken!!)
+        } catch (ex: Exception) {
+            errAlert(ex.localizedMessage)
+        }
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,32 +89,8 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
     }
 
     private fun signInWithGoogle() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        val client = GoogleSignIn.getClient(requireContext(), gso)
-
+        val client = googleSignInClient
         val intent = client.signInIntent
-        startActivityForResult(intent,  RC_SIGN_IN)
-    }
-
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-
-            try {
-                val account = task.getResult(ApiException::class.java)!!
-                toastl(account.id ?: "No id")
-
-                vModel.signInWithFirebase(account.idToken!!)
-            } catch (ex: Exception) {
-                errAlert(ex.localizedMessage)
-            }
-        }
+        resultLauncher.launch(intent)
     }
 }

@@ -1,5 +1,8 @@
 package dev.skyit.tmdb_findyourmovie.repo
 
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -21,7 +24,9 @@ interface UserRepo {
     suspend fun signOut()
 }
 
-class FirebaseUserRepo @Inject constructor(): UserRepo {
+class FirebaseUserRepo @Inject constructor(
+    private val googleSignInClient: GoogleSignInClient
+): UserRepo {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -48,5 +53,6 @@ class FirebaseUserRepo @Inject constructor(): UserRepo {
 
     override suspend fun signOut() {
         auth.signOut()
+        googleSignInClient.signOut().await()
     }
 }

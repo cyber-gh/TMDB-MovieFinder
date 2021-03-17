@@ -2,7 +2,7 @@ package dev.skyit.tmdb_findyourmovie.ui.profile
 
 import android.app.Activity
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
+import android.media.ExifInterface
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -15,22 +15,19 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.Coil
 import coil.load
 import coil.request.ImageRequest
-import com.afollestad.vvalidator.form
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
-import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.databinding.FragmentProfileBinding
 import dev.skyit.tmdb_findyourmovie.databinding.ListItemRecentlyWatchedBinding
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.generic.BaseFragment
-import dev.skyit.tmdb_findyourmovie.repo.toDbFormat
-import dev.skyit.tmdb_findyourmovie.ui.signin.SignInFragmentDirections
 import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
+import dev.skyit.tmdb_findyourmovie.ui.utils.rotateImage
 import dev.skyit.tmdb_findyourmovie.ui.utils.snack
-import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
 import java.io.File
+
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
@@ -49,20 +46,28 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             this.moviePreviewName.text = data.title
             this.simpleRatingBar.isVisible = false
 
-            Coil.enqueue(ImageRequest.Builder(requireContext())
-                .data(data.backdropPath)
-                .build())
+            Coil.enqueue(
+                ImageRequest.Builder(requireContext())
+                    .data(data.backdropPath)
+                    .build()
+            )
         }, onItemClick = { v, item ->
-            findNavController().navigate(ProfileFragmentDirections
-                .actionNavigationProfileToMovieDetailsFragment(
-                    item, v.moviePreview.transitionName, item.id
-                ),
+            findNavController().navigate(
+                ProfileFragmentDirections
+                    .actionNavigationProfileToMovieDetailsFragment(
+                        item, v.moviePreview.transitionName, item.id
+                    ),
                 FragmentNavigatorExtras(v.moviePreview to v.moviePreview.transitionName)
             )
         })
 
         binding.recentlyWatchedList.adapter = recentlyWatchedMoviesAdapter
-        binding.recentlyWatchedList.layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+        binding.recentlyWatchedList.layoutManager = GridLayoutManager(
+            requireContext(),
+            3,
+            GridLayoutManager.VERTICAL,
+            false
+        )
 
         vModel.recentlyWatchedList.observe(viewLifecycleOwner, {
             recentlyWatchedMoviesAdapter.updateData(ArrayList(it))
@@ -122,7 +127,20 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 
                     file?.let {
                         val bitmap = BitmapFactory.decodeFile(it.path)
-                        vModel.uploadAvatar(bitmap)
+                        val ei = ExifInterface(it.path)
+                        val orientation: Int = ei.getAttributeInt(
+                            ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_UNDEFINED
+                        )
+                        val adjustedBitmap = when(orientation) {
+                            ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(bitmap, 90f)
+                            ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(bitmap, 180f)
+                            ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(bitmap, 270f)
+                            else -> bitmap
+
+                        }
+
+                        vModel.uploadAvatar(adjustedBitmap)
 
                     }
                 }

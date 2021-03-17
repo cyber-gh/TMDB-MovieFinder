@@ -65,12 +65,12 @@ class FirebaseUserRepo @Inject constructor(
     }
 
     override suspend fun uploadAvatar(bitmap: Bitmap) {
+        if (!isAuthenticated) return
+
         val currentPic = currentUser?.profilePic
         if (currentPic != null) {
             remoteStorageRepo.deletePick(currentPic)
         }
-
-        if (!isAuthenticated) return
         val link = remoteStorageRepo.uploadImage(bitmap)
         auth.currentUser!!.updateProfile(UserProfileChangeRequest.Builder().setPhotoUri(link).build()).await()
 

@@ -13,7 +13,7 @@
     <string name="sign_in_button">Sign In</string>
     <string name="sign_in_guest">Sign in as guest</string>
     <string name="title_profile">Profile</string>
-    <string name="recently_watched">Recently watched</string>
+    <string name="recently_watched">Recently visited</string>
     <string name="movie">Movie</string>
     <string name="title_my_movies">My movies</string>
     <string name="added_watch_later">Added to Watch Later</string>

@@ -1,9 +1,13 @@
 package dev.skyit.tmdb_findyourmovie.ui.profile
 
+import android.app.Activity
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,6 +16,7 @@ import coil.Coil
 import coil.load
 import coil.request.ImageRequest
 import com.afollestad.vvalidator.form
+import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import dev.skyit.tmdb_findyourmovie.R
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
@@ -25,6 +30,7 @@ import dev.skyit.tmdb_findyourmovie.ui.utils.SimpleRecyclerAdapter
 import dev.skyit.tmdb_findyourmovie.ui.utils.errAlert
 import dev.skyit.tmdb_findyourmovie.ui.utils.snack
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
+import java.io.File
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
@@ -76,19 +82,51 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             snack("Logged Out")
         }
 
-        vModel.state.observe(viewLifecycleOwner, {
-            binding.signInBtn.isVisible = !vModel.isAuth
-            binding.signOutBtn.isVisible = vModel.isAuth
-
-            if (!vModel.isAuth) {
-                binding.username.text = "Guest User"
-                binding.moviePreview.setImageResource(R.drawable.profile_pic)
-            } else {
-                binding.username.text = vModel.username
-            }
+        vModel.errorsLive.observe(viewLifecycleOwner, Observer {
+            errAlert(it)
         })
 
+        vModel.state.observe(viewLifecycleOwner, {
+            val isAuth = it != null
+            binding.signInBtn.isVisible = !isAuth
+            binding.signOutBtn.isVisible = isAuth
 
+            if (!isAuth) {
+                binding.username.text = "Guest User"
+                binding.userAvatar.setImageResource(R.drawable.profile_pic)
+            } else {
+                binding.username.text = it!!.username
+
+                val path = it.profilePic
+                if (path != null) {
+                    binding.userAvatar.load(path)
+                }
+
+                binding.userAvatar.setOnClickListener {
+                    pickImage()
+                }
+            }
+        })
+    }
+
+    private fun pickImage() {
+        ImagePicker.with(this)
+            .compress(1024)
+            .start { resultCode, data ->
+                if (resultCode == Activity.RESULT_OK) {
+                    val fileUri = data?.data ?: return@start
+
+                    binding.userAvatar.setImageURI(fileUri)
+
+                    val file: File? = ImagePicker.getFile(data)
+
+                    file?.let {
+                        val bitmap = BitmapFactory.decodeFile(it.path)
+                        vModel.uploadAvatar(bitmap)
+
+                    }
+                }
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

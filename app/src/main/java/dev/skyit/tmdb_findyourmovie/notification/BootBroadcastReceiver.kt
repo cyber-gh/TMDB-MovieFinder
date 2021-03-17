@@ -21,25 +21,6 @@ class BootBroadcastReceiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
-
-        val now = DateTime.now()
-        val target = DateTime(now.date, Time(20, 0, 0))
-
-        val delay = if (now > target) {
-            val newTarget = target + 1.days
-            (newTarget - now).seconds
-        } else {
-            (target - now).seconds
-        }
-
-        val work = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.DAYS)
-            .setInitialDelay(delay.toLong(), TimeUnit.SECONDS)
-            .build()
-
-
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork("send_notification",
-            ExistingPeriodicWorkPolicy.REPLACE, work)
-
+        NotificationScheduler.scheduleNotification(context)
     }
 }

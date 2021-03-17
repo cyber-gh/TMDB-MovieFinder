@@ -1,5 +1,6 @@
 package dev.skyit.tmdb_findyourmovie.ui.profile
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import dev.skyit.tmdb_findyourmovie.api.IMoviesAPIClient
 import dev.skyit.tmdb_findyourmovie.api.models.movielist.MovieMinimal
 import dev.skyit.tmdb_findyourmovie.db.Models.MovieDb
 import dev.skyit.tmdb_findyourmovie.repo.RecentlyWatchedRepo
+import dev.skyit.tmdb_findyourmovie.repo.RemoteStorageRepo
 import dev.skyit.tmdb_findyourmovie.repo.UserDetails
 import dev.skyit.tmdb_findyourmovie.repo.UserRepo
 import dev.skyit.tmdb_findyourmovie.utils.LoadingResource
@@ -23,13 +25,9 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     val recentlyWatchedList: MutableLiveData<List<MovieDb>> = MutableLiveData()
 
-    val isAuth: Boolean
-        get() = userRepo.isAuthenticated
+    val state: MutableLiveData<UserDetails?> = MutableLiveData<UserDetails?>(userRepo.currentUser)
 
-    val state: MutableLiveData<Boolean> = MutableLiveData<Boolean>(isAuth)
-
-    val username: String
-        get() = userRepo.currentUser!!.username
+    val errorsLive: SingleLiveEvent<String> = SingleLiveEvent()
 
     fun loadRecentlyWatched() {
         viewModelScope.launch {
@@ -41,7 +39,19 @@ class ProfileViewModel @Inject constructor(
     fun signOut() {
         viewModelScope.launch {
             userRepo.signOut()
-            state.postValue(false)
+            state.postValue(null)
+        }
+    }
+
+    fun uploadAvatar(bitmap: Bitmap) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                userRepo.uploadAvatar(bitmap)
+            }.onSuccess {
+                state.postValue(userRepo.currentUser)
+            }.onFailure {
+                errorsLive.postValue(it.localizedMessage)
+            }
         }
     }
 

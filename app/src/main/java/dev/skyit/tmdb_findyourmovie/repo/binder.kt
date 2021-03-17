@@ -34,6 +34,10 @@ abstract class RepoModule {
     @Singleton
     @Binds
     abstract fun bindRecentlyWatchedRepo(recentlyImpl: RecentlyWatchedRepoImpl): RecentlyWatchedRepo
+
+    @Singleton
+    @Binds
+    abstract fun bindsFirebaseRemoteStorage(repo: FirebaseRemoteStorageRepo): RemoteStorageRepo
 }
 
 @Module
